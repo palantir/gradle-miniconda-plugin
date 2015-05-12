@@ -70,6 +70,7 @@ class MinicondaPlugin implements Plugin<Project> {
 
             project.task("setupPython") {
                 dependsOn "bootstrapPython"
+                inputs.property("packages", myExt.packages)
                 outputs.dir myExt.buildEnvironmentDirectory
                 doFirst {
                     myExt.buildEnvironmentDirectory.deleteDir()
