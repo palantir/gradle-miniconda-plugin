@@ -1,4 +1,4 @@
-Gradle Miniconda Plugin
+Gradle Miniconda Plugin ![build status](https://api.travis-ci.com/palantir/gradle-miniconda-plugin.svg?token=7onD2L3nEXMByQUNdxv1&branch=develop)
 =======================
 
 Plugin that sets up a Python environment for building and running tests using
