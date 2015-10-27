@@ -24,7 +24,8 @@ import nebula.test.IntegrationSpec
 class MinicondaSpec extends IntegrationSpec {
     // use a temp dir with a short name, because miniconda complains
     // when PREFIX is longer than 128 chars
-    private File tempDirectory = new File("/tmp/miniconda-${new Random().nextInt()}")
+    private String tempDirName = "/tmp/miniconda-${new Random().nextInt()}"
+    private File tempDirectory = new File(tempDirName)
 
     def setup() {
         tempDirectory.mkdirs()
@@ -40,8 +41,8 @@ class MinicondaSpec extends IntegrationSpec {
             apply plugin: 'com.palantir.mlx.build.miniconda'
 
             miniconda {
-                bootstrapDirectory = new File('$tempDirectory/bootstrap')
-                buildEnvironmentDirectory = new File('$tempDirectory/env')
+                bootstrapDirectory = new File('$tempDirName/bootstrap')
+                buildEnvironmentDirectory = new File('$tempDirName/env')
                 minicondaVersion = '3.10.1'
                 packages = ['ipython-notebook']
             }
@@ -51,6 +52,6 @@ class MinicondaSpec extends IntegrationSpec {
         runTasksSuccessfully('setupPython')
 
         then:
-        new File("$tempDirectory/env/bin/ipython").exists()
+        new File("$tempDirName/env/bin/ipython").exists()
     }
 }

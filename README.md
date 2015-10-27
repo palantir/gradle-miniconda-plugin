@@ -9,23 +9,27 @@ Usage
 
 Apply the plugin to your project and configure the associated extension:
 
-    plugins {
-        id 'com.palantir.mlx.build.miniconda' version '0.1.0-SNAPSHOT'
-    }
+```gradle
+plugins {
+    id 'com.palantir.mlx.build.miniconda' version '0.1.0-SNAPSHOT'
+}
 
-    miniconda {
-        bootstrapDirectory = new File(System.getProperty('user.home'), '.miniconda')
-        buildEnvironmentDirectory = new File(buildDir, 'python')
-        minicondaVersion = '3.10.1'
-        packages = ['ipython-notebook']
-    }
+miniconda {
+    bootstrapDirectory = new File(System.getProperty('user.home'), '.miniconda')
+    buildEnvironmentDirectory = new File(buildDir, 'python')
+    minicondaVersion = '3.10.1'
+    packages = ['ipython-notebook']
+}
+```
 
 Then invoke the `setupPython` task and use the resulting installation directory from `Exec` tasks:
 
-    task launchNotebook(type: Exec) {
-        dependsOn setupPython
-        commandLine "${miniconda.buildEnvironmentDirectory}/bin/ipython", 'notebook'
-    }
+```gradle
+task launchNotebook(type: Exec) {
+    dependsOn setupPython
+    commandLine "${miniconda.buildEnvironmentDirectory}/bin/ipython", 'notebook'
+}
+```
 
 Options
 -------
@@ -38,4 +42,4 @@ License
 -------
 
 Gradle Miniconda Plugin is released by Palantir Technologies, Inc. under the Apache 2.0 License. See the included
-LICENSE file for details.
+[LICENSE](LICENSE) file for details.

@@ -24,6 +24,8 @@ import org.gradle.api.tasks.Exec
  * @author pbiswal
  */
 class MinicondaPlugin implements Plugin<Project> {
+    def os = System.getProperty('os.name').replaceAll(' ', '')
+
     @Override
     void apply(Project project) {
         def myExt = project.extensions.create("miniconda", MinicondaExtension.class)
@@ -46,14 +48,25 @@ class MinicondaPlugin implements Plugin<Project> {
             conf.incoming.beforeResolve {
                 if (conf.dependencies.empty) {
                     project.dependencies {
-                        def os = System.getProperty('os.name').replaceAll(' ', '')
                         def arch = "x86_64"
-                        minicondaInstaller(group: "miniconda", name: "Miniconda", version: myExt.minicondaVersion) {
-                            artifact {
-                                name = "Miniconda"
-                                type = "sh"
-                                classifier = "$os-$arch"
-                                extension = "sh"
+                        if(os.contains("Windows")) {
+                            if(System.getenv("ProgramFiles(x86)") != null) arch = "x86_64" else arch = "x86"
+                            minicondaInstaller(group: "miniconda", name: "Miniconda", version: myExt.minicondaVersion) {
+                                artifact {
+                                    name = "Miniconda"
+                                    type = "exe"
+                                    classifier = "Windows-$arch"
+                                    extension = "exe"
+                                }
+                            }
+                        } else {
+                            minicondaInstaller(group: "miniconda", name: "Miniconda", version: myExt.minicondaVersion) {
+                                artifact {
+                                    name = "Miniconda"
+                                    type = "sh"
+                                    classifier = "$os-$arch"
+                                    extension = "sh"
+                                }
                             }
                         }
                     }
@@ -65,7 +78,11 @@ class MinicondaPlugin implements Plugin<Project> {
                 onlyIf {
                     !myExt.bootstrapDirectory.exists()
                 }
-                commandLine "bash", conf.singleFile, "-b", "-p", myExt.bootstrapDirectory
+                if(os.contains("Windows")) {
+                    commandLine conf.singleFile, "-b", "-p", myExt.bootstrapDirectory
+                } else {
+                    commandLine "bash", conf.singleFile, "-b", "-p", myExt.bootstrapDirectory
+                }
             }
 
             project.task("setupPython") {
