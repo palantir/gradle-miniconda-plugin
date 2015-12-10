@@ -36,7 +36,25 @@ class MinicondaSpec extends IntegrationSpec {
     }
 
     def 'setup and run build'() {
+        buildFile << """
+            apply plugin: 'com.palantir.mlx.build.miniconda'
 
+            miniconda {
+                bootstrapDirectory = new File('$tempDirName/bootstrap')
+                buildEnvironmentDirectory = new File('$tempDirName/env')
+                minicondaVersion = '3.18.3'
+                packages = ['ipython-notebook']
+            }
+        """
+
+        when:
+        runTasksSuccessfully('setupPython')
+
+        then:
+        new File("$tempDirName/env/bin/ipython").exists()
+    }
+
+    def 'support legacy versions'() {
         buildFile << """
             apply plugin: 'com.palantir.mlx.build.miniconda'
 
