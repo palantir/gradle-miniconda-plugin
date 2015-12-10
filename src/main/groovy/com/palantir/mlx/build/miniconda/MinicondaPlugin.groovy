@@ -47,26 +47,22 @@ class MinicondaPlugin implements Plugin<Project> {
             def conf = project.configurations.minicondaInstaller
             conf.incoming.beforeResolve {
                 if (conf.dependencies.empty) {
+                    def myExtension = "sh"
+                    def arch = "x86_64"
+                    if (os.contains("Windows")) {
+                        os = "Windows"
+                        myExtension = "exe"
+                        if (System.getenv("ProgramFiles(x86)") == null) {
+                            arch = "x86"
+                        }
+                    }
                     project.dependencies {
-                        def arch = "x86_64"
-                        if(os.contains("Windows")) {
-                            if(System.getenv("ProgramFiles(x86)") != null) arch = "x86_64" else arch = "x86"
-                            minicondaInstaller(group: "miniconda", name: "Miniconda", version: myExt.minicondaVersion) {
-                                artifact {
-                                    name = "Miniconda"
-                                    type = "exe"
-                                    classifier = "Windows-$arch"
-                                    extension = "exe"
-                                }
-                            }
-                        } else {
-                            minicondaInstaller(group: "miniconda", name: "Miniconda", version: myExt.minicondaVersion) {
-                                artifact {
-                                    name = "Miniconda"
-                                    type = "sh"
-                                    classifier = "$os-$arch"
-                                    extension = "sh"
-                                }
+                        minicondaInstaller(group: "miniconda", name: "Miniconda", version: myExt.minicondaVersion) {
+                            artifact {
+                                name = "Miniconda"
+                                type = myExtension
+                                classifier = "$os-$arch"
+                                extension = myExtension
                             }
                         }
                     }
