@@ -17,6 +17,7 @@ package com.palantir.mlx.build.miniconda
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.Exec
+import org.gradle.util.VersionNumber
 
 /**
  * Gradle plugin to download Miniconda and set up a Python build environment.
@@ -56,10 +57,15 @@ class MinicondaPlugin implements Plugin<Project> {
                             arch = "x86"
                         }
                     }
+                    def myName = "Miniconda2"
+                    // versions <= 3.16 were named "Miniconda-${version}"
+                    if (VersionNumber.parse(myExt.minicondaVersion) <= VersionNumber.parse("3.16")) {
+                        myName = "Miniconda"
+                    }
                     project.dependencies {
-                        minicondaInstaller(group: "miniconda", name: "Miniconda", version: myExt.minicondaVersion) {
+                        minicondaInstaller(group: "miniconda", name: myName, version: myExt.minicondaVersion) {
                             artifact {
-                                name = "Miniconda"
+                                name = myName
                                 type = myExtension
                                 classifier = "$os-$arch"
                                 extension = myExtension
