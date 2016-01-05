@@ -1,4 +1,4 @@
-Gradle Miniconda Plugin [![Build Status](https://magnum.travis-ci.com/palantir/gradle-miniconda-plugin.svg?token=7onD2L3nEXMByQUNdxv1&branch=develop)](https://magnum.travis-ci.com/palantir/gradle-miniconda-plugin)
+Gradle Miniconda Plugin [![Circle CI](https://circleci.com/gh/palantir/gradle-miniconda-plugin.svg?style=svg)](https://circleci.com/gh/palantir/gradle-miniconda-plugin)
 =======================
 
 Plugin that sets up a Python environment for building and running tests using
@@ -11,7 +11,7 @@ Apply the plugin to your project and configure the associated extension:
 
 ```gradle
 plugins {
-    id 'com.palantir.mlx.build.miniconda' version '0.1.0-SNAPSHOT'
+    id 'com.palantir.python.miniconda' version '0.3.0'
 }
 
 miniconda {

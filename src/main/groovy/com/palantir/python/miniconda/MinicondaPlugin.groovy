@@ -12,11 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.palantir.mlx.build.miniconda
+package com.palantir.python.miniconda
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.Exec
+import org.gradle.util.VersionNumber
 
 /**
  * Gradle plugin to download Miniconda and set up a Python build environment.
@@ -47,26 +48,27 @@ class MinicondaPlugin implements Plugin<Project> {
             def conf = project.configurations.minicondaInstaller
             conf.incoming.beforeResolve {
                 if (conf.dependencies.empty) {
+                    def myExtension = "sh"
+                    def arch = "x86_64"
+                    if (os.contains("Windows")) {
+                        os = "Windows"
+                        myExtension = "exe"
+                        if (System.getenv("ProgramFiles(x86)") == null) {
+                            arch = "x86"
+                        }
+                    }
+                    def myName = "Miniconda2"
+                    // versions <= 3.16 were named "Miniconda-${version}"
+                    if (VersionNumber.parse(myExt.minicondaVersion) <= VersionNumber.parse("3.16")) {
+                        myName = "Miniconda"
+                    }
                     project.dependencies {
-                        def arch = "x86_64"
-                        if(os.contains("Windows")) {
-                            if(System.getenv("ProgramFiles(x86)") != null) arch = "x86_64" else arch = "x86"
-                            minicondaInstaller(group: "miniconda", name: "Miniconda", version: myExt.minicondaVersion) {
-                                artifact {
-                                    name = "Miniconda"
-                                    type = "exe"
-                                    classifier = "Windows-$arch"
-                                    extension = "exe"
-                                }
-                            }
-                        } else {
-                            minicondaInstaller(group: "miniconda", name: "Miniconda", version: myExt.minicondaVersion) {
-                                artifact {
-                                    name = "Miniconda"
-                                    type = "sh"
-                                    classifier = "$os-$arch"
-                                    extension = "sh"
-                                }
+                        minicondaInstaller(group: "miniconda", name: myName, version: myExt.minicondaVersion) {
+                            artifact {
+                                name = myName
+                                type = myExtension
+                                classifier = "$os-$arch"
+                                extension = myExtension
                             }
                         }
                     }
