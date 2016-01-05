@@ -8,6 +8,12 @@ general:
   artifacts:
     - build/libs
 
+deployment:
+  master:
+    branch: [master]
+    commands:
+      - ./gradlew -Pgradle.publish.key=$GRADLE_PUBLISH_KEY -Pgradle.publish.secret=$GRADLE_PUBLISH_SECRET publishPlugins
+
 test:
   override:
     - ./gradlew build
