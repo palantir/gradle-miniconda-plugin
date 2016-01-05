@@ -11,7 +11,7 @@ Apply the plugin to your project and configure the associated extension:
 
 ```gradle
 plugins {
-    id 'com.palantir.mlx.build.miniconda' version '0.1.0-SNAPSHOT'
+    id 'com.palantir.python.miniconda' version '0.3.0'
 }
 
 miniconda {

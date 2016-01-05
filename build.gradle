@@ -19,7 +19,7 @@ plugins {
 }
 
 project.version = gitVersion()
-project.group = 'com.palantir.mlx.build'
+project.group = 'com.palantir.python'
 
 sourceCompatibility = '1.7'
 targetCompatibility = '1.7'
