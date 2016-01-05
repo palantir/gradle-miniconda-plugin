@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.palantir.mlx.build.miniconda
+package com.palantir.python.miniconda
 
 import org.gradle.api.Project
 import org.gradle.api.tasks.Exec
