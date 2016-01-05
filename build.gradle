@@ -46,7 +46,7 @@ pluginBundle {
     tags = ['python', 'miniconda']
     plugins {
         minicondaPlugin {
-            id = 'com.palantir.mlx.build.miniconda'
+            id = 'com.palantir.python.miniconda'
             displayName = 'Gradle Miniconda plugin'
         }
     }

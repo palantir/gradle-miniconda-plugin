@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.palantir.mlx.build.miniconda
+package com.palantir.python.miniconda
 
 import nebula.test.IntegrationSpec
 
@@ -37,7 +37,7 @@ class MinicondaSpec extends IntegrationSpec {
 
     def 'setup and run build'() {
         buildFile << """
-            apply plugin: 'com.palantir.mlx.build.miniconda'
+            apply plugin: 'com.palantir.python.miniconda'
 
             miniconda {
                 bootstrapDirectory = new File('$tempDirName/bootstrap')
@@ -56,7 +56,7 @@ class MinicondaSpec extends IntegrationSpec {
 
     def 'support legacy versions'() {
         buildFile << """
-            apply plugin: 'com.palantir.mlx.build.miniconda'
+            apply plugin: 'com.palantir.python.miniconda'
 
             miniconda {
                 bootstrapDirectory = new File('$tempDirName/bootstrap')
