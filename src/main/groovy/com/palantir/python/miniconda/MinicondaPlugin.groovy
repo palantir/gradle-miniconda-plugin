@@ -14,6 +14,8 @@
 
 package com.palantir.python.miniconda
 
+import java.io.File
+
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.Exec
@@ -75,15 +77,21 @@ class MinicondaPlugin implements Plugin<Project> {
                 }
             }
 
+            def minicondaBootstrapVersionDir = new File(myExt.bootstrapDirectory, myExt.minicondaVersion)
             project.task([type: Exec], "bootstrapPython") {
-                outputs.dir(myExt.bootstrapDirectory)
+                outputs.dir(minicondaBootstrapVersionDir)
                 onlyIf {
-                    !myExt.bootstrapDirectory.exists()
+                    !minicondaBootstrapVersionDir.exists()
                 }
-                if(os.contains("Windows")) {
-                    commandLine conf.singleFile, "-b", "-p", myExt.bootstrapDirectory
+                if (os.contains("Windows")) {
+                    commandLine conf.singleFile, "-b", "-p", minicondaBootstrapVersionDir
                 } else {
-                    commandLine "bash", conf.singleFile, "-b", "-p", myExt.bootstrapDirectory
+                    commandLine "bash", conf.singleFile, "-b", "-p", minicondaBootstrapVersionDir
+                }
+                doFirst {
+                    if (!myExt.bootstrapDirectory.exists()) {
+                        myExt.bootstrapDirectory.mkdir()
+                    }
                 }
             }
 
@@ -96,7 +104,7 @@ class MinicondaPlugin implements Plugin<Project> {
                 }
                 doLast {
                     project.exec {
-                        executable new File(new File(myExt.bootstrapDirectory, "bin"), "conda")
+                        executable new File(new File(minicondaBootstrapVersionDir, "bin"), "conda")
                         args "create", "--yes", "--quiet", "-p", myExt.buildEnvironmentDirectory
                         args myExt.packages
                     }

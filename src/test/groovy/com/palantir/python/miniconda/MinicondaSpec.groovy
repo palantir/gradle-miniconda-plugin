@@ -15,6 +15,7 @@
 package com.palantir.python.miniconda
 
 import nebula.test.IntegrationSpec
+import nebula.test.functional.ExecutionResult
 
 /**
  * Integration tests for the Miniconda plugin.
@@ -24,7 +25,7 @@ import nebula.test.IntegrationSpec
 class MinicondaSpec extends IntegrationSpec {
     // use a temp dir with a short name, because miniconda complains
     // when PREFIX is longer than 128 chars
-    private String tempDirName = "/tmp/miniconda-${new Random().nextInt()}"
+    private String tempDirName = "/tmp/miniconda-${new Random().nextInt(Integer.MAX_VALUE)}"
     private File tempDirectory = new File(tempDirName)
 
     def setup() {
@@ -71,5 +72,39 @@ class MinicondaSpec extends IntegrationSpec {
 
         then:
         new File("$tempDirName/env/bin/ipython").exists()
+    }
+
+    def 'support multiple versions'() {
+        buildFile << """
+            apply plugin: 'com.palantir.python.miniconda'
+
+            miniconda {
+                bootstrapDirectory = new File('$tempDirName/bootstrap')
+                buildEnvironmentDirectory = new File('$tempDirName/env1')
+                minicondaVersion = '3.10.1'
+                packages = ['python']
+            }
+        """
+        addSubproject("foo", """
+            apply plugin: 'com.palantir.python.miniconda'
+
+            miniconda {
+                bootstrapDirectory = new File('$tempDirName/bootstrap')
+                buildEnvironmentDirectory = new File('$tempDirName/env2')
+                minicondaVersion = '3.16.0'
+                packages = ['python']
+            }
+        """)
+
+        when:
+        ExecutionResult result = runTasksSuccessfully(':setupPython', ':foo:setupPython')
+
+        then:
+        println result.standardOutput
+        println result.standardError
+        new File("$tempDirName/bootstrap/3.10.1").exists()
+        new File("$tempDirName/bootstrap/3.16.0").exists()
+        wasExecuted(':bootstrapPython')
+        wasExecuted(':foo:bootstrapPython')
     }
 }
