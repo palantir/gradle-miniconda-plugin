@@ -7,32 +7,7 @@ Plugin that sets up a Python environment for building and running tests using
 Usage
 -----
 
-Apply the plugin to your project:
-
-```gradle
-plugins {
-    id 'com.palantir.python.miniconda' version '0.3.2'
-}
-```
-
-or alternatively
-
-```gradle
-buildscript {
-  repositories {
-    maven {
-      url "https://plugins.gradle.org/m2/"
-    }
-  }
-  dependencies {
-    classpath "gradle.plugin.com.palantir.python:gradle-miniconda-plugin:0.3.2"
-  }
-}
-
-apply plugin: "com.palantir.python.miniconda"
-```
-
-and configure the associated extension:
+Apply the plugin to your project following [`https://plugins.gradle.org/plugin/com.palantir.python.miniconda`](https://plugins.gradle.org/plugin/com.palantir.python.miniconda), and configure the associated extension:
 
 ```gradle
 miniconda {
