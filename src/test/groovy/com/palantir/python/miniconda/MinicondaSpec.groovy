@@ -41,7 +41,7 @@ class MinicondaSpec extends IntegrationSpec {
             apply plugin: 'com.palantir.python.miniconda'
 
             miniconda {
-                bootstrapDirectory = new File('$tempDirName/bootstrap')
+                bootstrapDirectoryPrefix = new File('$tempDirName/bootstrap')
                 buildEnvironmentDirectory = new File('$tempDirName/env')
                 minicondaVersion = '3.18.3'
                 packages = ['ipython-notebook']
@@ -60,7 +60,7 @@ class MinicondaSpec extends IntegrationSpec {
             apply plugin: 'com.palantir.python.miniconda'
 
             miniconda {
-                bootstrapDirectory = new File('$tempDirName/bootstrap')
+                bootstrapDirectoryPrefix = new File('$tempDirName/bootstrap')
                 buildEnvironmentDirectory = new File('$tempDirName/env')
                 minicondaVersion = '3.10.1'
                 packages = ['ipython-notebook']
@@ -79,7 +79,7 @@ class MinicondaSpec extends IntegrationSpec {
             apply plugin: 'com.palantir.python.miniconda'
 
             miniconda {
-                bootstrapDirectory = new File('$tempDirName/bootstrap')
+                bootstrapDirectoryPrefix = new File('$tempDirName/bootstrap')
                 buildEnvironmentDirectory = new File('$tempDirName/env1')
                 minicondaVersion = '3.10.1'
                 packages = ['python']
@@ -89,7 +89,7 @@ class MinicondaSpec extends IntegrationSpec {
             apply plugin: 'com.palantir.python.miniconda'
 
             miniconda {
-                bootstrapDirectory = new File('$tempDirName/bootstrap')
+                bootstrapDirectoryPrefix = new File('$tempDirName/bootstrap')
                 buildEnvironmentDirectory = new File('$tempDirName/env2')
                 minicondaVersion = '3.16.0'
                 packages = ['python']
@@ -100,11 +100,9 @@ class MinicondaSpec extends IntegrationSpec {
         ExecutionResult result = runTasksSuccessfully(':setupPython', ':foo:setupPython')
 
         then:
-        println result.standardOutput
-        println result.standardError
         new File("$tempDirName/bootstrap/3.10.1").exists()
         new File("$tempDirName/bootstrap/3.16.0").exists()
-        wasExecuted(':bootstrapPython')
-        wasExecuted(':foo:bootstrapPython')
+        result.wasExecuted(':bootstrapPython')
+        result.wasExecuted(':foo:bootstrapPython')
     }
 }
