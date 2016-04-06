@@ -49,5 +49,5 @@ Backwards Compatibility Breaks
 ### 0.4.0
 The bootstrap Python is now placed in `bootstrapDirectoryPrefix/minicondaVersion`. Users now must set
 `bootstrapDirectoryPrefix` instead of `bootstrapDirectory`. You can still get the new directory of the bootstrap Python
-by calling the `bootstrapDirectory` property.
+by referring to the `bootstrapDirectory` property.
 
