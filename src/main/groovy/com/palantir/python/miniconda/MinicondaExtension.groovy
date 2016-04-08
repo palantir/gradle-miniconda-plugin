@@ -14,17 +14,18 @@
 
 package com.palantir.python.miniconda
 
-import org.gradle.api.Project
-import org.gradle.api.tasks.Exec
-
 /**
  * Project extension to configure Python build environment.
  *
  * @author pbiswal
  */
 class MinicondaExtension {
-    File bootstrapDirectory
+    File bootstrapDirectoryPrefix
     File buildEnvironmentDirectory
     String minicondaVersion
     List<String> packages
+
+    File getBootstrapDirectory() {
+        return new File(bootstrapDirectoryPrefix, minicondaVersion)
+    }
 }
