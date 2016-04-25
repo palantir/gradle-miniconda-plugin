@@ -36,7 +36,7 @@ class MinicondaPlugin implements Plugin<Project> {
 
         project.repositories {
             ivy {
-                url "http://repo.continuum.io"
+                url "https://repo.continuum.io"
                 layout "pattern", {
                     artifact "[organisation]/[module]-[revision]-[classifier].[ext]"
                 }
@@ -92,7 +92,12 @@ class MinicondaPlugin implements Plugin<Project> {
                     if (!myExt.bootstrapDirectoryPrefix.exists()) {
                         myExt.bootstrapDirectoryPrefix.mkdirs()
                     }
+                    if (myExt.bootstrapDirectory.exists()) {
+                        project.delete myExt.bootstrapDirectory
+                    }
                 }
+
+                onlyIf { !myExt.bootstrapDirectory.exists() }
             }
 
             project.task([type: Delete], 'cleanBootstrapPython') {
@@ -107,6 +112,11 @@ class MinicondaPlugin implements Plugin<Project> {
                 executable Paths.get("$myExt.bootstrapDirectory", 'bin', 'conda')
                 args "create", "--yes", "--quiet", "-p", myExt.buildEnvironmentDirectory
                 args myExt.packages
+                doFirst {
+                    if (!myExt.buildEnvironmentDirectory.exists()) {
+                        myExt.buildEnvironmentDirectory.delete()
+                    }
+                }
             }
 
             project.task([type: Delete], 'cleanSetupPython') {
