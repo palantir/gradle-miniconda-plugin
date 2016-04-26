@@ -15,7 +15,6 @@
 plugins {
     id 'idea'
     id 'groovy'
-    id 'maven-publish'
     id 'com.gradle.plugin-publish' version '0.9.4'
     id 'com.palantir.git-version' version '0.3.0'
 }
@@ -28,17 +27,6 @@ targetCompatibility = '1.7'
 
 repositories {
     jcenter()
-}
-
-publishing {
-    repositories {
-        mavenLocal()
-    }
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-        }
-    }
 }
 
 // See https://docs.gradle.org/2.6/userguide/test_kit.html
