@@ -47,6 +47,36 @@ class MinicondaPlugin implements Plugin<Project> {
             minicondaInstaller
         }
 
+        def bootstrapPython = project.task([type: Exec], 'bootstrapPython') {
+            group 'build'
+            description 'Installs a vanilla miniconda root environment.'
+
+            mustRunAfter 'cleanBootstrapPython'
+        }
+
+        def setupPython = project.task([type: Exec], 'setupPython') {
+            group 'build'
+            description 'Installs a conda env with specified packages.'
+
+            dependsOn bootstrapPython
+            mustRunAfter 'cleanSetupPython'
+        }
+
+        def cleanSetupPython = project.task([type: Delete], 'cleanSetupPython') {
+            group 'build'
+            description 'Removes the conda env with specified packages.'
+
+            delete setupPython.outputs.files
+        }
+
+        def cleanBootstrapPython = project.task([type: Delete], 'cleanBootstrapPython') {
+            group 'build'
+            description 'Removes the root miniconda environment.'
+
+            dependsOn cleanSetupPython
+            delete bootstrapPython.outputs.files
+        }
+
         project.afterEvaluate {
             def conf = project.configurations.minicondaInstaller
             conf.incoming.beforeResolve {
@@ -78,10 +108,7 @@ class MinicondaPlugin implements Plugin<Project> {
                 }
             }
 
-            def bootstrapPython = project.task([type: Exec], "bootstrapPython") {
-                group 'build'
-                description 'Installs a vanilla miniconda root environment.'
-
+            bootstrapPython.configure {
                 inputs.property "version", myExt.minicondaVersion
                 inputs.property "directory", myExt.bootstrapDirectoryPrefix
                 outputs.dir myExt.bootstrapDirectory
@@ -103,37 +130,19 @@ class MinicondaPlugin implements Plugin<Project> {
                 onlyIf { !myExt.bootstrapDirectory.exists() }
             }
 
-            def setupPython = project.task([type: Exec], 'setupPython') {
-                group 'build'
-                description 'Installs a conda env with specified packages.'
-
-                dependsOn bootstrapPython
+            setupPython.configure {
                 inputs.property "packages", myExt.packages
                 outputs.dir myExt.buildEnvironmentDirectory
 
                 executable Paths.get("$myExt.bootstrapDirectory", 'bin', 'conda')
                 args "create", "--yes", "--quiet", "-p", myExt.buildEnvironmentDirectory
                 args myExt.packages
+
                 doFirst {
-                    if (!myExt.buildEnvironmentDirectory.exists()) {
-                        myExt.buildEnvironmentDirectory.delete()
+                    if (myExt.buildEnvironmentDirectory.exists()) {
+                        project.delete myExt.buildEnvironmentDirectory
                     }
                 }
-            }
-
-            def cleanSetupPython = project.task([type: Delete], 'cleanSetupPython') {
-                group 'build'
-                description 'Removes the special conda env'
-
-                delete setupPython.outputs.files
-            }
-
-            project.task([type: Delete], 'cleanBootstrapPython') {
-                group 'build'
-                description 'Removes the root miniconda environment.'
-
-                dependsOn cleanSetupPython
-                delete bootstrapPython.outputs.files
             }
         }
     }
