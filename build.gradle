@@ -15,6 +15,7 @@
 plugins {
     id 'idea'
     id 'groovy'
+    id 'java-gradle-plugin'
     id 'com.gradle.plugin-publish' version '0.9.4'
     id 'com.palantir.git-version' version '0.3.0'
 }
@@ -29,29 +30,12 @@ repositories {
     jcenter()
 }
 
-// See https://docs.gradle.org/2.6/userguide/test_kit.html
-// Write the plugin's classpath to a file to share with the tests
-task createClasspathManifest {
-    def outputDir = file("$buildDir/$name")
-
-    inputs.files sourceSets.main.runtimeClasspath
-    outputs.dir outputDir
-
-    doLast {
-        outputDir.mkdirs()
-        file("$outputDir/plugin-classpath.txt").text = sourceSets.main.runtimeClasspath.join("\n")
-    }
-}
-
 dependencies {
     compile gradleApi()
 
-    testCompile gradleTestKit()
     testCompile('com.netflix.nebula:nebula-test:4.0.0') {
         exclude group: 'org.codehaus.groovy'
     }
-
-    testRuntime files(createClasspathManifest)
 }
 
 pluginBundle {

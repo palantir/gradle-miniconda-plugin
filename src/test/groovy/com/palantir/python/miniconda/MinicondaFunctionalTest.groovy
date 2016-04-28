@@ -35,26 +35,6 @@ class MinicondaFunctionalTest extends Specification {
     def setup() {
         buildFile = testProjectDir.newFile('build.gradle');
         minicondaDir = testProjectDir.newFolder();
-
-        // See https://docs.gradle.org/2.6/userguide/test_kit.html
-        def pluginClasspathResource = getClass().classLoader.findResource('plugin-classpath.txt')
-        if (pluginClasspathResource == null) {
-            throw new IllegalStateException('Did not find plugin classpath resource, run `testClasses` build task.')
-        }
-
-        def pluginClasspath = pluginClasspathResource.readLines()
-                .collect { it.replace('\\', '\\\\') } // escape backslashes in Windows paths
-                .collect { "'$it'" }
-                .join(', ')
-
-        // Add the logic under test to the test build
-        buildFile << """
-            buildscript {
-                dependencies {
-                    classpath files($pluginClasspath)
-                }
-            }
-        """
     }
 
     def cleanup() {
@@ -63,7 +43,9 @@ class MinicondaFunctionalTest extends Specification {
 
     def 'only one run'() {
         buildFile << """
-            apply plugin: 'com.palantir.python.miniconda'
+            plugins {
+                id 'com.palantir.python.miniconda'
+            }
 
             miniconda {
                 bootstrapDirectoryPrefix = new File('$minicondaDir/bootstrap')
@@ -77,6 +59,7 @@ class MinicondaFunctionalTest extends Specification {
         def runner = GradleRunner.create()
                 .withProjectDir(testProjectDir.getRoot())
                 .withArguments(":setupPython")
+                .withPluginClasspath()
 
         BuildResult result = runner.build();
         BuildResult secondResult = runner.build();

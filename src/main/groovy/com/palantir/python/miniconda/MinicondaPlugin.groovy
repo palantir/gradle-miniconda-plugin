@@ -19,9 +19,6 @@ import org.gradle.api.Project
 import org.gradle.api.tasks.Delete
 import org.gradle.api.tasks.Exec
 import org.gradle.util.VersionNumber
-
-import java.nio.file.Paths
-
 /**
  * Gradle plugin to download Miniconda and set up a Python build environment.
  *
@@ -134,7 +131,7 @@ class MinicondaPlugin implements Plugin<Project> {
                 inputs.property "packages", myExt.packages
                 outputs.dir myExt.buildEnvironmentDirectory
 
-                executable Paths.get("$myExt.bootstrapDirectory", 'bin', 'conda')
+                executable myExt.bootstrapDirectory.toPath().resolve('bin/conda')
                 args "create", "--yes", "--quiet", "-p", myExt.buildEnvironmentDirectory
                 args myExt.packages
 
