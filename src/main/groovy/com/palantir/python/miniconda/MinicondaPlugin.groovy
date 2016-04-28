@@ -116,9 +116,7 @@ class MinicondaPlugin implements Plugin<Project> {
                     commandLine "bash", conf.singleFile, "-b", "-p", myExt.bootstrapDirectory
                 }
                 doFirst {
-                    if (!myExt.bootstrapDirectoryPrefix.exists()) {
-                        myExt.bootstrapDirectoryPrefix.mkdirs()
-                    }
+                    myExt.bootstrapDirectoryPrefix.mkdirs()
                     if (myExt.bootstrapDirectory.exists()) {
                         project.delete myExt.bootstrapDirectory
                     }
