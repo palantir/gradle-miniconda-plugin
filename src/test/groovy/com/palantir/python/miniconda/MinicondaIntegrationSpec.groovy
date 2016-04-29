@@ -17,16 +17,17 @@ package com.palantir.python.miniconda
 import nebula.test.IntegrationSpec
 import nebula.test.functional.ExecutionResult
 
+import java.nio.file.Files
+
 /**
  * Integration tests for the Miniconda plugin.
  *
  * @author pbiswal
  */
-class MinicondaSpec extends IntegrationSpec {
+class MinicondaIntegrationSpec extends IntegrationSpec {
     // use a temp dir with a short name, because miniconda complains
     // when PREFIX is longer than 128 chars
-    private String tempDirName = "/tmp/miniconda-${new Random().nextInt(Integer.MAX_VALUE)}"
-    private File tempDirectory = new File(tempDirName)
+    private File tempDirectory = Files.createTempDirectory("miniconda").toFile()
 
     def setup() {
         tempDirectory.mkdirs()
@@ -41,18 +42,18 @@ class MinicondaSpec extends IntegrationSpec {
             apply plugin: 'com.palantir.python.miniconda'
 
             miniconda {
-                bootstrapDirectoryPrefix = new File('$tempDirName/bootstrap')
-                buildEnvironmentDirectory = new File('$tempDirName/env')
+                bootstrapDirectoryPrefix = new File('$tempDirectory/bootstrap')
+                buildEnvironmentDirectory = new File('$tempDirectory/env')
                 minicondaVersion = '3.18.3'
                 packages = ['ipython-notebook']
             }
         """
 
         when:
-        runTasksSuccessfully('setupPython')
+        ExecutionResult result = runTasksSuccessfully('setupPython')
 
         then:
-        new File("$tempDirName/env/bin/ipython").exists()
+        new File("$tempDirectory/env/bin/ipython").exists()
     }
 
     def 'support legacy versions'() {
@@ -60,18 +61,18 @@ class MinicondaSpec extends IntegrationSpec {
             apply plugin: 'com.palantir.python.miniconda'
 
             miniconda {
-                bootstrapDirectoryPrefix = new File('$tempDirName/bootstrap')
-                buildEnvironmentDirectory = new File('$tempDirName/env')
+                bootstrapDirectoryPrefix = new File('$tempDirectory/bootstrap')
+                buildEnvironmentDirectory = new File('$tempDirectory/env')
                 minicondaVersion = '3.10.1'
                 packages = ['ipython-notebook']
             }
         """
 
         when:
-        runTasksSuccessfully('setupPython')
+        ExecutionResult result = runTasksSuccessfully('setupPython')
 
         then:
-        new File("$tempDirName/env/bin/ipython").exists()
+        new File("$tempDirectory/env/bin/ipython").exists()
     }
 
     def 'support multiple versions'() {
@@ -79,8 +80,8 @@ class MinicondaSpec extends IntegrationSpec {
             apply plugin: 'com.palantir.python.miniconda'
 
             miniconda {
-                bootstrapDirectoryPrefix = new File('$tempDirName/bootstrap')
-                buildEnvironmentDirectory = new File('$tempDirName/env1')
+                bootstrapDirectoryPrefix = new File('$tempDirectory/bootstrap')
+                buildEnvironmentDirectory = new File('$tempDirectory/env1')
                 minicondaVersion = '3.10.1'
                 packages = ['python']
             }
@@ -89,8 +90,8 @@ class MinicondaSpec extends IntegrationSpec {
             apply plugin: 'com.palantir.python.miniconda'
 
             miniconda {
-                bootstrapDirectoryPrefix = new File('$tempDirName/bootstrap')
-                buildEnvironmentDirectory = new File('$tempDirName/env2')
+                bootstrapDirectoryPrefix = new File('$tempDirectory/bootstrap')
+                buildEnvironmentDirectory = new File('$tempDirectory/env2')
                 minicondaVersion = '3.16.0'
                 packages = ['python']
             }
@@ -100,8 +101,8 @@ class MinicondaSpec extends IntegrationSpec {
         ExecutionResult result = runTasksSuccessfully(':setupPython', ':foo:setupPython')
 
         then:
-        new File("$tempDirName/bootstrap/3.10.1").exists()
-        new File("$tempDirName/bootstrap/3.16.0").exists()
+        new File("$tempDirectory/bootstrap/3.10.1").exists()
+        new File("$tempDirectory/bootstrap/3.16.0").exists()
         result.wasExecuted(':bootstrapPython')
         result.wasExecuted(':foo:bootstrapPython')
     }

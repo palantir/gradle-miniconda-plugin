@@ -15,6 +15,7 @@
 plugins {
     id 'idea'
     id 'groovy'
+    id 'java-gradle-plugin'
     id 'com.gradle.plugin-publish' version '0.9.4'
     id 'com.palantir.git-version' version '0.3.0'
 }
@@ -31,13 +32,10 @@ repositories {
 
 dependencies {
     compile gradleApi()
+
     testCompile('com.netflix.nebula:nebula-test:4.0.0') {
         exclude group: 'org.codehaus.groovy'
     }
-}
-
-task sourceJar(type: Jar) {
-    from sourceSets.main.allSource
 }
 
 pluginBundle {
@@ -51,4 +49,9 @@ pluginBundle {
             displayName = 'Gradle Miniconda plugin'
         }
     }
+}
+
+test {
+    maxParallelForks = 10
+    forkEvery = 1
 }
