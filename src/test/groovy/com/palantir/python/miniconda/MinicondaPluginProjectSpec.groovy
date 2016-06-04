@@ -14,18 +14,13 @@
 
 package com.palantir.python.miniconda
 
-/**
- * Project extension to configure Python build environment.
- *
- * @author pbiswal
- */
-class MinicondaExtension {
-    File bootstrapDirectoryPrefix
-    File buildEnvironmentDirectory
-    String minicondaVersion
-    List<String> packages
+import nebula.test.PluginProjectSpec
 
-    File getBootstrapDirectory() {
-        return new File(bootstrapDirectoryPrefix, minicondaVersion)
-    }
+/**
+ * PluginProjectSpec test for the Miniconda plugin.
+ *
+ * @author mnazario
+ */
+class MinicondaPluginProjectSpec extends PluginProjectSpec {
+    String pluginName = 'com.palantir.python.miniconda'
 }

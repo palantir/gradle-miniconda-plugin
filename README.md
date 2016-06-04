@@ -7,15 +7,13 @@ Plugin that sets up a Python environment for building and running tests using
 Usage
 -----
 
-Apply the plugin to your project and configure the associated extension:
+Apply the plugin to your project following
+[`https://plugins.gradle.org/plugin/com.palantir.python.miniconda`](https://plugins.gradle.org/plugin/com.palantir.python.miniconda),
+and configure the associated extension:
 
 ```gradle
-plugins {
-    id 'com.palantir.python.miniconda' version '0.3.0'
-}
-
 miniconda {
-    bootstrapDirectory = new File(System.getProperty('user.home'), '.miniconda')
+    bootstrapDirectoryPrefix = new File(System.getProperty('user.home'), '.miniconda')
     buildEnvironmentDirectory = new File(buildDir, 'python')
     minicondaVersion = '3.10.1'
     packages = ['ipython-notebook']
@@ -26,8 +24,9 @@ Then invoke the `setupPython` task and use the resulting installation directory 
 
 ```gradle
 task launchNotebook(type: Exec) {
-    dependsOn setupPython
-    commandLine "${miniconda.buildEnvironmentDirectory}/bin/ipython", 'notebook'
+    dependsOn 'setupPython'
+    executable "${miniconda.buildEnvironmentDirectory}/bin/ipython"
+    args 'notebook'
 }
 ```
 
@@ -43,3 +42,12 @@ License
 
 Gradle Miniconda Plugin is released by Palantir Technologies, Inc. under the Apache 2.0 License. See the included
 [LICENSE](LICENSE) file for details.
+
+Backwards Compatibility Breaks
+------------------------------
+
+### 0.4.0
+The bootstrap Python is now placed in `bootstrapDirectoryPrefix/minicondaVersion`. Users now must set
+`bootstrapDirectoryPrefix` instead of `bootstrapDirectory`. You can still get the new directory of the bootstrap Python
+by referring to the `bootstrapDirectory` property.
+
