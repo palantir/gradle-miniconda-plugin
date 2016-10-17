@@ -16,7 +16,7 @@ plugins {
     id 'idea'
     id 'groovy'
     id 'java-gradle-plugin'
-    id 'com.gradle.plugin-publish' version '0.9.4'
+    id 'com.gradle.plugin-publish' version '0.9.6'
     id 'com.palantir.git-version' version '0.3.0'
 }
 
