@@ -12,11 +12,11 @@ deployment:
   master:
     branch: [master]
     commands:
-      - ./gradlew -Dgradle.publish.key=$GRADLE_PUBLISH_KEY -Dgradle.publish.secret=$GRADLE_PUBLISH_SECRET publishPlugins
+      - ./gradlew -Dgradle.publish.key="$GRADLE_PUBLISH_KEY" -Dgradle.publish.secret="$GRADLE_PUBLISH_SECRET" publishPlugins
 
 test:
   override:
     - ./gradlew build
   post:
-    - mkdir -p $CIRCLE_TEST_REPORTS/junit/
-    - cp build/test-results/*.xml $CIRCLE_TEST_REPORTS/junit/ 
+    - mkdir -p "$CIRCLE_TEST_REPORTS/junit/"
+    - cp build/test-results/test/*.xml "$CIRCLE_TEST_REPORTS/junit/"
