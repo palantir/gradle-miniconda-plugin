@@ -20,7 +20,7 @@ package com.palantir.python.miniconda
  * @author pbiswal
  */
 class MinicondaExtension {
-    static String DEFAULT_CHANNEL = "https://repo.continuum.io"
+    static String DEFAULT_CHANNEL = "https://repo.continuum.io/pkgs/free"
 
     File bootstrapDirectoryPrefix
     File buildEnvironmentDirectory
