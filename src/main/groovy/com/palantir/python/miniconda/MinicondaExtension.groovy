@@ -20,10 +20,14 @@ package com.palantir.python.miniconda
  * @author pbiswal
  */
 class MinicondaExtension {
+    static String DEFAULT_CHANNEL = "https://repo.continuum.io"
+
     File bootstrapDirectoryPrefix
     File buildEnvironmentDirectory
     String minicondaVersion
     List<String> packages
+
+    List<String> channels = [DEFAULT_CHANNEL]
 
     File getBootstrapDirectory() {
         return new File(bootstrapDirectoryPrefix, minicondaVersion)

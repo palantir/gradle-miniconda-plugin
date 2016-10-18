@@ -19,6 +19,7 @@ import org.gradle.api.Project
 import org.gradle.api.tasks.Delete
 import org.gradle.api.tasks.Exec
 import org.gradle.util.VersionNumber
+
 /**
  * Gradle plugin to download Miniconda and set up a Python build environment.
  *
@@ -130,7 +131,8 @@ class MinicondaPlugin implements Plugin<Project> {
                 outputs.dir myExt.buildEnvironmentDirectory
 
                 executable myExt.bootstrapDirectory.toPath().resolve('bin/conda')
-                args "create", "--yes", "--quiet", "-p", myExt.buildEnvironmentDirectory
+                args "create", "--yes", "--quiet", "-p", myExt.buildEnvironmentDirectory, "--override-channels"
+                args convertChannelsToArgs(myExt.channels)
                 args myExt.packages
 
                 doFirst {
@@ -140,5 +142,14 @@ class MinicondaPlugin implements Plugin<Project> {
                 }
             }
         }
+    }
+
+    private static List<String> convertChannelsToArgs(List<String> channels) {
+        List<String> args = new ArrayList<>();
+        for (String channel : channels) {
+            args.add("--channel");
+            args.add(channel);
+        }
+        return args;
     }
 }
