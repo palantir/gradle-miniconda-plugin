@@ -16,8 +16,8 @@ plugins {
     id 'idea'
     id 'groovy'
     id 'java-gradle-plugin'
-    id 'com.gradle.plugin-publish' version '0.9.4'
-    id 'com.palantir.git-version' version '0.3.0'
+    id 'com.gradle.plugin-publish' version '0.9.6'
+    id 'com.palantir.git-version' version '0.5.2'
 }
 
 project.version = gitVersion()
@@ -33,7 +33,7 @@ repositories {
 dependencies {
     compile gradleApi()
 
-    testCompile('com.netflix.nebula:nebula-test:4.0.0') {
+    testCompile('com.netflix.nebula:nebula-test:4.2.2') {
         exclude group: 'org.codehaus.groovy'
     }
 }
