@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Objects;
 import org.gradle.api.Action;
 import org.gradle.api.Task;
+import org.gradle.api.tasks.AbstractExecTask;
 import org.gradle.api.tasks.TaskContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +33,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author mnazbro
  */
-public class SetupPython extends AbstractCleanableExecTask<SetupPython> {
+public class SetupPython extends AbstractExecTask<SetupPython> {
     private static final Logger LOG = LoggerFactory.getLogger(SetupPython.class);
 
     private static final String DEFAULT_GROUP = "build";
@@ -45,8 +46,9 @@ public class SetupPython extends AbstractCleanableExecTask<SetupPython> {
         SetupPython task = tasks.create("setupPython", SetupPython.class);
         task.setGroup(DEFAULT_GROUP);
         task.setDescription(DEFAULT_DESCRIPTION);
-        task.createCleanupTask(tasks);
         task.dependsOn(bootstrapPython);
+
+        CleanTaskUtils.createCleanupTask(tasks, task);
         return task;
     }
 
