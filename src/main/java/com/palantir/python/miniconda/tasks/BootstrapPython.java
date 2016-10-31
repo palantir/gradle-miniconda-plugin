@@ -23,8 +23,6 @@ import org.gradle.api.Action;
 import org.gradle.api.Task;
 import org.gradle.api.specs.Spec;
 import org.gradle.api.tasks.AbstractExecTask;
-import org.gradle.api.tasks.Delete;
-import org.gradle.api.tasks.Exec;
 import org.gradle.api.tasks.TaskContainer;
 import org.gradle.internal.os.OperatingSystem;
 import org.slf4j.Logger;

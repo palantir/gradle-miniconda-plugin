@@ -17,10 +17,12 @@
 package com.palantir.python.miniconda;
 
 import com.palantir.python.miniconda.tasks.BootstrapPython;
+import com.palantir.python.miniconda.tasks.CleanTaskUtils;
 import com.palantir.python.miniconda.tasks.SetupPython;
 import org.gradle.api.Action;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
+import org.gradle.api.Task;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.artifacts.repositories.IvyArtifactRepository;
 import org.gradle.api.artifacts.repositories.IvyPatternRepositoryLayout;
@@ -49,6 +51,11 @@ public class MinicondaPlugin implements Plugin<Project> {
         TaskContainer tasks = project.getTasks();
         BootstrapPython bootstrapPython = BootstrapPython.createTask(tasks);
         SetupPython setupPython = SetupPython.createTask(tasks, bootstrapPython);
+
+        Task cleanBootstrapPython = project.getTasks().getByName(CleanTaskUtils.getCleanTaskName(bootstrapPython));
+        Task cleanSetupPython = project.getTasks().getByName(CleanTaskUtils.getCleanTaskName(setupPython));
+        cleanBootstrapPython.dependsOn(cleanSetupPython);
+
         project.getExtensions().create(EXTENSION_NAME, MinicondaExtension.class, project);
 
         LOG.debug("MinicondaPlugin tasks created.");
