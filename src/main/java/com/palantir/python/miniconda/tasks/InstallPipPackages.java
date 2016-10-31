@@ -34,18 +34,11 @@ public class InstallPipPackages extends AbstractExecTask<InstallPipPackages> {
         InstallPipPackages task = project.getTasks().create("installPipPackages", InstallPipPackages.class);
         task.dependsOn(setupPython);
         task.executable(miniconda.getBuildEnvironmentDirectory().toPath().resolve("bin/pip"));
-        task.args("install", getRequirementString(requirements));
+        task.args("install");
+        task.args(requirements);
 
         CleanTaskUtils.createCleanupTask(project.getTasks(), task);
         return task;
-    }
-
-    private static String getRequirementString(List<String> requirements) {
-        StringBuilder builder = new StringBuilder();
-        for (String requirement : requirements) {
-            builder.append(requirement);
-        }
-        return builder.toString();
     }
 
     public InstallPipPackages() {
