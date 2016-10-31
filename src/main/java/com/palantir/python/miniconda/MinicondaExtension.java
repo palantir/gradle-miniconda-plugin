@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import org.gradle.api.Project;
 
 /**
  * Project extension to configureAfterEvaluate Python build environment.
@@ -33,18 +34,23 @@ public class MinicondaExtension {
     private static final String DEFAULT_CHANNEL = "https://repo.continuum.io/pkgs/free";
     private static final File DEFAULT_BOOTSTRAP_DIRECTORY_PREFIX =
             new File(System.getProperty("user.home"), ".miniconda-bootstrap");
-    private static final File DEFAULT_BUILD_ENVIRONMENT_DIRECTORY = new File("build/miniconda");
+    private static final String DEFAULT_BUILD_ENVIRONMENT_DIRECTORY = "build/miniconda";
+
+    private final Project project;
 
     private String minicondaVersion;
     private File bootstrapDirectoryPrefix = DEFAULT_BOOTSTRAP_DIRECTORY_PREFIX;
-    private File buildEnvironmentDirectory = DEFAULT_BUILD_ENVIRONMENT_DIRECTORY;
+    private File buildEnvironmentDirectory = null;
     private List<String> packages = new ArrayList<>();
     private List<String> channels = new ArrayList<>(Collections.singletonList(DEFAULT_CHANNEL));
+
+    public MinicondaExtension(Project project) {
+        this.project = project;
+    }
 
     public void validate() {
         Objects.requireNonNull(minicondaVersion, "miniconda.minicondaVersion must be set.");
         Objects.requireNonNull(bootstrapDirectoryPrefix, "miniconda.bootstrapDirectoryPrefix must not be null.");
-        Objects.requireNonNull(buildEnvironmentDirectory, "miniconda.buildEnvironmentDirectory must not be null.");
         Objects.requireNonNull(packages, "miniconda.packages must not be null.");
         if (packages.isEmpty()) {
             throw new IllegalArgumentException("miniconda.packages must contain at least one requirement.");
@@ -76,7 +82,18 @@ public class MinicondaExtension {
     }
 
     public File getBuildEnvironmentDirectory() {
+        if (buildEnvironmentDirectory == null) {
+            return project.file(DEFAULT_BUILD_ENVIRONMENT_DIRECTORY);
+        }
         return buildEnvironmentDirectory;
+    }
+
+    public void setBuildEnvironmentDirectory(String buildEnvironmentDirectory) {
+        setBuildEnvironmentDirectory(new File(buildEnvironmentDirectory));
+    }
+
+    public void setBuildEnvironmentDirectory(Path buildEnvironmentDirectory) {
+        setBuildEnvironmentDirectory(buildEnvironmentDirectory.toFile());
     }
 
     public void setBuildEnvironmentDirectory(File buildEnvironmentDirectory) {

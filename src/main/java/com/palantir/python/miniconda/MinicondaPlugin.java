@@ -49,7 +49,7 @@ public class MinicondaPlugin implements Plugin<Project> {
         TaskContainer tasks = project.getTasks();
         BootstrapPython bootstrapPython = BootstrapPython.createTask(tasks);
         SetupPython setupPython = SetupPython.createTask(tasks, bootstrapPython);
-        project.getExtensions().create(EXTENSION_NAME, MinicondaExtension.class);
+        project.getExtensions().create(EXTENSION_NAME, MinicondaExtension.class, project);
 
         LOG.debug("MinicondaPlugin tasks created.");
         Configuration configuration = project.getConfigurations().create(CONFIGURATION_NAME);
