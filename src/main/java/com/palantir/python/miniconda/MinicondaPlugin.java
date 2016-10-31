@@ -26,6 +26,8 @@ import org.gradle.api.artifacts.repositories.IvyArtifactRepository;
 import org.gradle.api.artifacts.repositories.IvyPatternRepositoryLayout;
 import org.gradle.api.tasks.TaskContainer;
 import org.gradle.internal.os.OperatingSystem;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Gradle plugin to download Miniconda and set up a Python build environment.
@@ -33,6 +35,7 @@ import org.gradle.internal.os.OperatingSystem;
  * @author pbiswal
  */
 public class MinicondaPlugin implements Plugin<Project> {
+    private static final Logger LOG = LoggerFactory.getLogger(MinicondaPlugin.class);
 
     private static final OperatingSystem OS = OperatingSystem.current();
     private static final String EXTENSION_NAME = "miniconda";
@@ -46,10 +49,11 @@ public class MinicondaPlugin implements Plugin<Project> {
         TaskContainer tasks = project.getTasks();
         BootstrapPython bootstrapPython = BootstrapPython.createTask(tasks);
         SetupPython setupPython = SetupPython.createTask(tasks, bootstrapPython);
+        project.getExtensions().create(EXTENSION_NAME, MinicondaExtension.class);
 
-        MinicondaExtension miniconda = project.getExtensions().create(EXTENSION_NAME, MinicondaExtension.class);
+        LOG.debug("MinicondaPlugin tasks created.");
         Configuration configuration = project.getConfigurations().create(CONFIGURATION_NAME);
-        project.afterEvaluate(new AfterEvaluateAction(OS, miniconda, configuration, bootstrapPython, setupPython));
+        project.afterEvaluate(new AfterEvaluateAction(OS, configuration, bootstrapPython, setupPython));
     }
 
     private static void createIvyRepository(Project project) {
@@ -65,5 +69,6 @@ public class MinicondaPlugin implements Plugin<Project> {
                 });
             }
         });
+        LOG.debug("Added Ivy repository url: {}", IVY_REPO_URL);
     }
 }

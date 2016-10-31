@@ -20,6 +20,7 @@ import com.palantir.python.miniconda.MinicondaExtension;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import org.gradle.api.Action;
 import org.gradle.api.Task;
 import org.gradle.api.tasks.TaskContainer;
@@ -38,6 +39,9 @@ public class SetupPython extends AbstractCleanableExecTask<SetupPython> {
     private static final String DEFAULT_DESCRIPTION = "Installs a conda env with specified packages.";
 
     public static SetupPython createTask(TaskContainer tasks, BootstrapPython bootstrapPython) {
+        Objects.requireNonNull(tasks, "tasks must not be null");
+        Objects.requireNonNull(bootstrapPython, "bootstrapPython must not be null");
+
         SetupPython task = tasks.create("setupPython", SetupPython.class);
         task.setGroup(DEFAULT_GROUP);
         task.setDescription(DEFAULT_DESCRIPTION);
@@ -51,6 +55,8 @@ public class SetupPython extends AbstractCleanableExecTask<SetupPython> {
     }
 
     public void configureAfterEvaluate(final MinicondaExtension miniconda) {
+        Objects.requireNonNull(miniconda, "miniconda must not be null");
+
         getInputs().property("packages", miniconda.getPackages());
         getOutputs().dir(miniconda.getBuildEnvironmentDirectory());
         executable(miniconda.getBootstrapDirectory().toPath().resolve("bin/conda"));
@@ -64,6 +70,7 @@ public class SetupPython extends AbstractCleanableExecTask<SetupPython> {
             public void execute(Task task) {
                 if (miniconda.getBuildEnvironmentDirectory().exists()) {
                     getProject().delete(miniconda.getBuildEnvironmentDirectory());
+                    LOG.debug("Deleted BuildEnvironmentDir dir: {}", miniconda.getBuildEnvironmentDirectory());
                 }
             }
         });

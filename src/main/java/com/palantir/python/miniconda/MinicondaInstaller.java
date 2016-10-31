@@ -31,7 +31,7 @@ import org.gradle.util.VersionNumber;
  * @author mnazbro
  */
 public class MinicondaInstaller {
-    private static final VersionNumber MINIMUM_NON_LEGACY_VERSION = VersionNumber.parse("3.16");
+    private static final VersionNumber MINIMUM_NON_LEGACY_VERSION = VersionNumber.parse("3.16.0");
     private static final String CONFIGURATION_NAME = "minicondaInstaller";
 
     private final OperatingSystem os;

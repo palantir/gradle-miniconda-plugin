@@ -31,13 +31,14 @@ public abstract class AbstractCleanableExecTask<T extends AbstractCleanableExecT
         super(taskType);
     }
 
-    public void createCleanupTask(TaskContainer tasks) {
+    public Delete createCleanupTask(TaskContainer tasks) {
         Delete clean = tasks.create(makeCleanTaskName(), Delete.class);
         clean.setGroup(getGroup());
         clean.setDescription("Cleans for " + getName());
         clean.delete(getOutputs().getFiles());
 
         mustRunAfter(clean);
+        return clean;
     }
 
     private String makeCleanTaskName() {
