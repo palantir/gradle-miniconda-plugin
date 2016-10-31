@@ -15,7 +15,7 @@ and configure the associated extension:
 miniconda {
     bootstrapDirectoryPrefix = new File(System.getProperty('user.home'), '.miniconda')
     buildEnvironmentDirectory = new File(buildDir, 'python')
-    minicondaVersion = '3.10.1'
+    minicondaVersion = '3.19.0'
     packages = ['ipython-notebook']
 }
 ```
@@ -35,7 +35,7 @@ Options
 
 You can customize where the Miniconda installer script is downloaded from by adding a dependency to the
 `minicondaInstaller` configuration. By default, it's downloaded from
-[`http://repo.continuum.io`](http://repo.continuum.io).
+[`https://repo.continuum.io`](https://repo.continuum.io).
 
 License
 -------
