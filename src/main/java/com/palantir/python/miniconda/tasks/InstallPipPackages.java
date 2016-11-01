@@ -23,6 +23,8 @@ import org.gradle.api.tasks.AbstractExecTask;
 
 /**
  * Installs pip packages into the Python environment.
+ *
+ * @author mnazbro
  */
 public class InstallPipPackages extends AbstractExecTask<InstallPipPackages> {
 

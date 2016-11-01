@@ -16,31 +16,33 @@
 
 package com.palantir.python.miniconda
 
+import java.nio.file.Files
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
-import org.junit.Rule
-import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
 /**
  * Functional tests for the Miniconda plugin.
  *
- * @author mnazario
+ * @author mnazbro
  */
 class MinicondaFunctionalTest extends Specification {
-    @Rule
-    final TemporaryFolder testProjectDir = new TemporaryFolder();
+    // use a temp dir with a short name, because miniconda complains
+    // when PREFIX is longer than 128 chars
+    private File tempDirectory = Files.createTempDirectory("miniconda").toFile()
+
     File buildFile;
     File minicondaDir;
 
     def setup() {
-        buildFile = testProjectDir.newFile('build.gradle');
-        minicondaDir = testProjectDir.newFolder();
+        tempDirectory.mkdirs()
+        buildFile = new File(tempDirectory, 'build.gradle')
+        minicondaDir = new File(tempDirectory, 'miniconda')
     }
 
     def cleanup() {
-        testProjectDir.delete()
+        tempDirectory.deleteDir()
     }
 
     def 'only one run'() {
@@ -54,12 +56,13 @@ class MinicondaFunctionalTest extends Specification {
                 buildEnvironmentDirectory = new File('$minicondaDir/env')
                 minicondaVersion = '3.18.3'
                 packages = ['ipython-notebook']
+                channels = ["${TestConstants.CHANNEL}"]
             }
         """
 
         when:
         def runner = GradleRunner.create()
-                .withProjectDir(testProjectDir.getRoot())
+                .withProjectDir(tempDirectory)
                 .withArguments(":setupPython")
                 .withPluginClasspath()
 

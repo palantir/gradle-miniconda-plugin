@@ -23,6 +23,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import org.gradle.api.Project;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Project extension to configureAfterEvaluate Python build environment.
@@ -30,15 +32,18 @@ import org.gradle.api.Project;
  * @author pbiswal
  */
 public class MinicondaExtension {
+    private static final Logger LOG = LoggerFactory.getLogger(MinicondaExtension.class);
 
     private static final String DEFAULT_CHANNEL = "https://repo.continuum.io/pkgs/free";
     private static final File DEFAULT_BOOTSTRAP_DIRECTORY_PREFIX =
             new File(System.getProperty("user.home"), ".miniconda-bootstrap");
     private static final String DEFAULT_BUILD_ENVIRONMENT_DIRECTORY = "build/miniconda";
+    private static final int DEFAULT_PYTHON_VERSION = 2;
 
     private final Project project;
 
     private String minicondaVersion;
+    private int pythonVersion = DEFAULT_PYTHON_VERSION;
     private File bootstrapDirectoryPrefix = DEFAULT_BOOTSTRAP_DIRECTORY_PREFIX;
     private File buildEnvironmentDirectory = null;
     private List<String> packages = new ArrayList<>();
@@ -59,10 +64,19 @@ public class MinicondaExtension {
         if (channels.isEmpty()) {
             throw new IllegalArgumentException("miniconda.channels must contain at least one channel.");
         }
+        if (pythonVersion <= 1) {
+            throw new IllegalArgumentException("miniconda.pythonVersion must be 2 or greater.");
+        } else if (pythonVersion > 3) {
+            LOG.warn("The miniconda-gradle-plugin was designed when only Python 3 existed. Any version greater than 3"
+                    + " is allowed, but not tested or supported.");
+        }
     }
 
     public File getBootstrapDirectory() {
-        return new File(bootstrapDirectoryPrefix, minicondaVersion);
+        return bootstrapDirectoryPrefix.toPath()
+                .resolve("python-" + pythonVersion)
+                .resolve("miniconda-" + minicondaVersion)
+                .toFile();
     }
 
     public File getBootstrapDirectoryPrefix() {
@@ -106,6 +120,14 @@ public class MinicondaExtension {
 
     public void setMinicondaVersion(String minicondaVersion) {
         this.minicondaVersion = minicondaVersion;
+    }
+
+    public int getPythonVersion() {
+        return pythonVersion;
+    }
+
+    public void setPythonVersion(int pythonVersion) {
+        this.pythonVersion = pythonVersion;
     }
 
     public List<String> getPackages() {

@@ -48,11 +48,12 @@ class MinicondaIntegrationSpec extends IntegrationSpec {
                 buildEnvironmentDirectory = new File('$tempDirectory/env')
                 minicondaVersion = '3.18.3'
                 packages = ['ipython-notebook']
+                channels = ["${TestConstants.CHANNEL}"]
             }
         """
 
         when:
-        ExecutionResult result = runTasksSuccessfully('setupPython')
+        runTasksSuccessfully('setupPython')
 
         then:
         new File("$tempDirectory/env/bin/ipython").exists()
@@ -67,6 +68,28 @@ class MinicondaIntegrationSpec extends IntegrationSpec {
                 buildEnvironmentDirectory = new File('$tempDirectory/env')
                 minicondaVersion = '3.10.1'
                 packages = ['ipython-notebook']
+                channels = ["${TestConstants.CHANNEL}"]
+            }
+        """
+
+        when:
+        runTasksSuccessfully('setupPython')
+
+        then:
+        new File("$tempDirectory/env/bin/ipython").exists()
+    }
+
+    def 'support miniconda3'() {
+        buildFile << """
+            apply plugin: 'com.palantir.python.miniconda'
+
+            miniconda {
+                bootstrapDirectoryPrefix = new File('$tempDirectory/bootstrap')
+                buildEnvironmentDirectory = new File('$tempDirectory/env')
+                minicondaVersion = '3.10.1'
+                pythonVersion = 3
+                packages = ['python']
+                channels = ["${TestConstants.CHANNEL}"]
             }
         """
 
@@ -74,7 +97,8 @@ class MinicondaIntegrationSpec extends IntegrationSpec {
         ExecutionResult result = runTasksSuccessfully('setupPython')
 
         then:
-        new File("$tempDirectory/env/bin/ipython").exists()
+        new File("$tempDirectory/bootstrap/python-3/miniconda-3.10.1").exists()
+        result.wasExecuted(':bootstrapPython')
     }
 
     def 'support multiple versions'() {
@@ -86,6 +110,7 @@ class MinicondaIntegrationSpec extends IntegrationSpec {
                 buildEnvironmentDirectory = new File('$tempDirectory/env1')
                 minicondaVersion = '3.10.1'
                 packages = ['python']
+                channels = ["${TestConstants.CHANNEL}"]
             }
         """
         addSubproject("foo", """
@@ -96,6 +121,7 @@ class MinicondaIntegrationSpec extends IntegrationSpec {
                 buildEnvironmentDirectory = new File('$tempDirectory/env2')
                 minicondaVersion = '3.16.0'
                 packages = ['python']
+                channels = ["${TestConstants.CHANNEL}"]
             }
         """)
 
@@ -103,8 +129,8 @@ class MinicondaIntegrationSpec extends IntegrationSpec {
         ExecutionResult result = runTasksSuccessfully(':setupPython', ':foo:setupPython')
 
         then:
-        new File("$tempDirectory/bootstrap/3.10.1").exists()
-        new File("$tempDirectory/bootstrap/3.16.0").exists()
+        new File("$tempDirectory/bootstrap/python-2/miniconda-3.10.1").exists()
+        new File("$tempDirectory/bootstrap/python-2/miniconda-3.16.0").exists()
         result.wasExecuted(':bootstrapPython')
         result.wasExecuted(':foo:bootstrapPython')
     }

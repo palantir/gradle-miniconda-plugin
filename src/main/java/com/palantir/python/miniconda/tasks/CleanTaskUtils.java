@@ -22,6 +22,8 @@ import org.gradle.api.tasks.TaskContainer;
 
 /**
  * Utility class for creating clean tasks based off of a task.
+ *
+ * @author mnazbro
  */
 public final class CleanTaskUtils {
 

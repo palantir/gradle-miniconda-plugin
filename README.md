@@ -46,6 +46,9 @@ Gradle Miniconda Plugin is released by Palantir Technologies, Inc. under the Apa
 Backwards Compatibility Breaks
 ------------------------------
 
+### 0.5.0
+The bootstrap Python is now placed in `bootstrapDirectoryPrefix/python-$pythonVersion/miniconda-$minicondaVersion`.
+
 ### 0.4.0
 The bootstrap Python is now placed in `bootstrapDirectoryPrefix/minicondaVersion`. Users now must set
 `bootstrapDirectoryPrefix` instead of `bootstrapDirectory`. You can still get the new directory of the bootstrap Python

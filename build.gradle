@@ -46,7 +46,6 @@ targetCompatibility = '1.7'
 
 repositories {
     jcenter()
-    mavenLocal()
 }
 
 dependencies {
