@@ -32,19 +32,16 @@ import org.gradle.internal.os.OperatingSystem;
 public class AfterEvaluateAction implements Action<Project> {
 
     private final OperatingSystem os;
-    private final MinicondaExtension miniconda;
     private final Configuration configuration;
     private final BootstrapPython bootstrapPython;
     private final SetupPython setupPython;
 
     public AfterEvaluateAction(
             OperatingSystem os,
-            MinicondaExtension miniconda,
             Configuration configuration,
             BootstrapPython bootstrapPython,
             SetupPython setupPython) {
         this.os = os;
-        this.miniconda = miniconda;
         this.configuration = configuration;
         this.bootstrapPython = bootstrapPython;
         this.setupPython = setupPython;
@@ -52,14 +49,15 @@ public class AfterEvaluateAction implements Action<Project> {
 
     @Override
     public void execute(Project project) {
+        MinicondaExtension miniconda = project.getExtensions().getByType(MinicondaExtension.class);
         miniconda.validate();
 
-        addMinicondaInstallerDependency(project);
+        addMinicondaInstallerDependency(project, miniconda);
         bootstrapPython.configureAfterEvaluate(miniconda, configuration.getSingleFile(), os);
         setupPython.configureAfterEvaluate(miniconda);
     }
 
-    private void addMinicondaInstallerDependency(final Project project) {
+    private void addMinicondaInstallerDependency(final Project project, final MinicondaExtension miniconda) {
         configuration.getIncoming().beforeResolve(new Action<ResolvableDependencies>() {
             @Override
             public void execute(ResolvableDependencies resolvableDependencies) {

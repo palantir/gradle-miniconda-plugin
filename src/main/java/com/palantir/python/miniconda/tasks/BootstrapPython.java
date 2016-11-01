@@ -18,9 +18,11 @@ package com.palantir.python.miniconda.tasks;
 
 import com.palantir.python.miniconda.MinicondaExtension;
 import java.io.File;
+import java.util.Objects;
 import org.gradle.api.Action;
 import org.gradle.api.Task;
 import org.gradle.api.specs.Spec;
+import org.gradle.api.tasks.AbstractExecTask;
 import org.gradle.api.tasks.TaskContainer;
 import org.gradle.internal.os.OperatingSystem;
 import org.slf4j.Logger;
@@ -31,17 +33,19 @@ import org.slf4j.LoggerFactory;
  *
  * @author mnazbro
  */
-public class BootstrapPython extends AbstractCleanableExecTask<BootstrapPython> {
+public class BootstrapPython extends AbstractExecTask<BootstrapPython> {
     private static final Logger LOG = LoggerFactory.getLogger(BootstrapPython.class);
 
     private static final String DEFAULT_GROUP = "build";
     private static final String DEFAULT_DESCRIPTION = "Installs a conda env with specified packages.";
 
     public static BootstrapPython createTask(TaskContainer tasks) {
+        Objects.requireNonNull(tasks, "tasks must not be null");
+
         BootstrapPython task = tasks.create("bootstrapPython", BootstrapPython.class);
         task.setGroup(DEFAULT_GROUP);
         task.setDescription(DEFAULT_DESCRIPTION);
-        task.createCleanupTask(tasks);
+        CleanTaskUtils.createCleanupTask(tasks, task);
         return task;
     }
 
@@ -50,6 +54,10 @@ public class BootstrapPython extends AbstractCleanableExecTask<BootstrapPython> 
     }
 
     public void configureAfterEvaluate(final MinicondaExtension miniconda, File condaInstaller, OperatingSystem os) {
+        Objects.requireNonNull(miniconda, "miniconda must not be null");
+        Objects.requireNonNull(condaInstaller, "condaInstaller must not be null");
+        Objects.requireNonNull(os, "os must not be null");
+
         getInputs().property("version", miniconda.getMinicondaVersion());
         getInputs().property("directory", miniconda.getBootstrapDirectoryPrefix());
         getOutputs().dir(miniconda.getBootstrapDirectory());
@@ -66,13 +74,16 @@ public class BootstrapPython extends AbstractCleanableExecTask<BootstrapPython> 
             public void execute(Task task) {
                 if (!miniconda.getBootstrapDirectoryPrefix().mkdirs()) {
                     getProject().delete(miniconda.getBootstrapDirectory());
+                    LOG.debug("Deleted BootstrapPython dir: {}", miniconda.getBootstrapDirectory());
                 }
             }
         });
         onlyIf(new Spec<Task>() {
             @Override
             public boolean isSatisfiedBy(Task task) {
-                return !miniconda.getBootstrapDirectory().exists();
+                boolean directoryDoesNotExist = !miniconda.getBootstrapDirectory().exists();
+                LOG.debug("BootstrapPython directory exists: {}", !directoryDoesNotExist);
+                return directoryDoesNotExist;
             }
         });
         LOG.info("{} configured to execute {}", getName(), getCommandLine());

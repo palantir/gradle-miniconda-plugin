@@ -31,7 +31,8 @@ import org.gradle.util.VersionNumber;
  * @author mnazbro
  */
 public class MinicondaInstaller {
-    private static final VersionNumber MINIMUM_NON_LEGACY_VERSION = VersionNumber.parse("3.16");
+    private static final int POTENTIAL_LEGACY_PYTHON_VERSION = 2;
+    private static final VersionNumber MINIMUM_NON_LEGACY_VERSION = VersionNumber.parse("3.16.0");
     private static final String CONFIGURATION_NAME = "minicondaInstaller";
 
     private final OperatingSystem os;
@@ -64,7 +65,7 @@ public class MinicondaInstaller {
         if (isLegacyMiniconda()) {
             return "Miniconda";
         }
-        return "Miniconda2";
+        return "Miniconda" + miniconda.getPythonVersion();
     }
 
     private String getExtension() {
@@ -101,6 +102,7 @@ public class MinicondaInstaller {
     }
 
     private boolean isLegacyMiniconda() {
-        return VersionNumber.parse(miniconda.getMinicondaVersion()).compareTo(MINIMUM_NON_LEGACY_VERSION) <= 0;
+        return miniconda.getPythonVersion() == POTENTIAL_LEGACY_PYTHON_VERSION
+                && VersionNumber.parse(miniconda.getMinicondaVersion()).compareTo(MINIMUM_NON_LEGACY_VERSION) <= 0;
     }
 }

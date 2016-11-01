@@ -16,36 +16,38 @@
 
 package com.palantir.python.miniconda.tasks;
 
-import org.gradle.api.tasks.AbstractExecTask;
+import org.gradle.api.Task;
 import org.gradle.api.tasks.Delete;
 import org.gradle.api.tasks.TaskContainer;
 
 /**
- * An abstract {@link AbstractExecTask} that has support for adding a clean task.
+ * Utility class for creating clean tasks based off of a task.
  *
  * @author mnazbro
  */
-public abstract class AbstractCleanableExecTask<T extends AbstractCleanableExecTask> extends AbstractExecTask<T> {
+public final class CleanTaskUtils {
 
-    public AbstractCleanableExecTask(Class<T> taskType) {
-        super(taskType);
+    public static Delete createCleanupTask(TaskContainer tasks, Task task) {
+        String cleanTaskName = getCleanTaskName(task);
+        Delete clean = tasks.create(cleanTaskName, Delete.class);
+        clean.setGroup(task.getGroup());
+        clean.setDescription("Cleans for " + task.getName());
+        clean.delete(task.getOutputs().getFiles());
+
+        task.mustRunAfter(clean);
+        return clean;
     }
 
-    public void createCleanupTask(TaskContainer tasks) {
-        Delete clean = tasks.create(makeCleanTaskName(), Delete.class);
-        clean.setGroup(getGroup());
-        clean.setDescription("Cleans for " + getName());
-        clean.delete(getOutputs().getFiles());
-
-        mustRunAfter(clean);
-    }
-
-    private String makeCleanTaskName() {
-        String name = getName();
+    public static String getCleanTaskName(Task task) {
+        String name = task.getName();
         if (name.isEmpty()) {
             throw new IllegalArgumentException("Cannot have an empty name");
         }
         String firstChar = name.substring(0, 1);
         return "clean" + firstChar.toUpperCase() + name.substring(1);
+    }
+
+    private CleanTaskUtils() {
+        // Ignore
     }
 }
