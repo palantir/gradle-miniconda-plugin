@@ -81,9 +81,9 @@ public class BootstrapPython extends AbstractExecTask<BootstrapPython> {
         onlyIf(new Spec<Task>() {
             @Override
             public boolean isSatisfiedBy(Task task) {
-                boolean directoryExists = !miniconda.getBootstrapDirectory().exists();
-                LOG.debug("BootstrapPython directory exists: {}", directoryExists);
-                return directoryExists;
+                boolean directoryDoesNotExist = !miniconda.getBootstrapDirectory().exists();
+                LOG.debug("BootstrapPython directory exists: {}", !directoryDoesNotExist);
+                return directoryDoesNotExist;
             }
         });
         LOG.info("{} configured to execute {}", getName(), getCommandLine());

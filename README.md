@@ -24,7 +24,7 @@ Then invoke the `setupPython` task and use the resulting installation directory 
 task launchNotebook(type: Exec) {
     dependsOn 'setupPython'
     executable "${miniconda.buildEnvironmentDirectory}/bin/python"
-    args '-c', 'print("Hello world!)'
+    args '-c', 'print("Hello world!")'
 }
 ```
 
@@ -36,9 +36,9 @@ Options
 | minicondaVersion | N/A | The miniconda version which you want to use. See [the miniconda repo](https://repo.continuum.io/miniconda/) | false
 | packages | N/A | The conda packages you want installed into your conda environment. This list must contain at least one argument. | false
 | bootstrapDirectoryPrefix | `new File(System.getProperty('user.home'), '.miniconda')` | The root directory to put the root install of miniconda. This helps performance by caching the root environment by `pythonVersion` and `minicondaVersion`. | true
-| buildEnvironmentDirectory | new File(buildDir, 'miniconda') | The directory to place your specific miniconda environment. | true
-| pythonVersion | 2 | The python version you want for your miniconda. If you want Miniconda3, this value is 3. | true
-| channels | ['https://repo.continuum.io/pkgs/free'] | The list of conda channels you want to use for downloading conda packages. Must not be empty. | true
+| buildEnvironmentDirectory | `new File(buildDir, 'miniconda')` | The directory to place your specific miniconda environment. | true
+| pythonVersion | `2` | The python version you want for your miniconda. If you want Miniconda3, this value is 3. | true
+| channels | `['https://repo.continuum.io/pkgs/free']` | The list of conda channels you want to use for downloading conda packages. Must not be empty. | true
 
 Here is an example of the plugin with all the bells and whistles.
 ```gradle
