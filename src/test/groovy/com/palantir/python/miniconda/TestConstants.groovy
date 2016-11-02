@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-package com.palantir.python.miniconda
-
-import nebula.test.PluginProjectSpec
+package com.palantir.python.miniconda;
 
 /**
- * PluginProjectSpec test for the Miniconda plugin.
+ * A class for test constants in case there is a systematic change that needs to be done to test in your environment.
  *
  * @author mnazbro
  */
-class MinicondaPluginProjectSpec extends PluginProjectSpec {
-    String pluginName = 'com.palantir.python.miniconda'
+class TestConstants {
+    static final String CHANNEL = "https://repo.continuum.io/pkgs/free"
 }
