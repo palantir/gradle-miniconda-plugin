@@ -145,4 +145,9 @@ public class MinicondaExtension {
     public void setChannels(List<String> channels) {
         this.channels = channels;
     }
+
+    public String getBuildEnvironmentPythonPath() {
+        return "";
+    }
+
 }
