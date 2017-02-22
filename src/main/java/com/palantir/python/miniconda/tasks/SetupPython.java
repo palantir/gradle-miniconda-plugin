@@ -61,7 +61,8 @@ public class SetupPython extends AbstractExecTask<SetupPython> {
 
         getInputs().property("packages", miniconda.getPackages());
         getOutputs().dir(miniconda.getBuildEnvironmentDirectory());
-        executable(miniconda.getBootstrapDirectory().toPath().resolve("bin/conda"));
+        // Why does this work on windows without a cmd prefix?
+        executable(miniconda.getBootstrapDirectory().toPath().resolve(miniconda.getScriptsRelativeDir() + "/conda"));
         args("create", "--yes", "--quiet", "-p", miniconda.getBuildEnvironmentDirectory());
         args("--override-channels");
         args(convertChannelsToArgs(miniconda.getChannels()));
