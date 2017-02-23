@@ -67,7 +67,7 @@ public class SetupPython extends AbstractExecTask<SetupPython> {
                 .resolve(miniconda.getScriptsRelativeDir() + "/conda");
         if (miniconda.getOs().isWindows()) {
             executable("cmd");
-            args("-c", condaPath);
+            args("/c", condaPath);
         } else {
             executable(condaPath);
         }
