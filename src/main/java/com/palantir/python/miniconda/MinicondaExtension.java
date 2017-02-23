@@ -164,10 +164,6 @@ public class MinicondaExtension {
         }
     }
 
-    public String getBuildEnvironmentPythonPath() {
-        return "";
-    }
-
     public OperatingSystem getOs() {
         return os;
     }
