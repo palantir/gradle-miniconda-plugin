@@ -47,7 +47,7 @@ public abstract class AbstractRunVenvCommand extends AbstractTask {
                 if (workingDir != null) {
                     execSpec.workingDir(workingDir);
                 }
-                ArrayList<Object> commandLineList = new ArrayList<>();
+                List<Object> commandLineList = new ArrayList<>();
                 commandLineList.addAll(commandPrefix);
                 commandLineList.add(getExecutable());
                 commandLineList.addAll(args);
