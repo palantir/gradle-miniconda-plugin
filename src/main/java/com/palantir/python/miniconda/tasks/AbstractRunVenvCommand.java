@@ -57,8 +57,11 @@ public abstract class AbstractRunVenvCommand extends AbstractTask {
     }
 
     AbstractRunVenvCommand() {
-        commandPrefix.add("cmd");
-        commandPrefix.add("/c");
+        dependsOn(getProject().getTasks().findByName("setupPython"));
+        if (miniconda.getOs().isWindows()) {
+            commandPrefix.add("cmd");
+            commandPrefix.add("/c");
+        }
     }
 
     protected abstract Path getExecutable();
