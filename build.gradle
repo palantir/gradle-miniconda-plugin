@@ -41,8 +41,6 @@ allprojects {
     group 'com.palantir.python'
 }
 
-testClasses.enabled = false
-
 sourceCompatibility = '1.7'
 targetCompatibility = '1.7'
 

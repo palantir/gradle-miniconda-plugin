@@ -27,7 +27,6 @@ import org.gradle.internal.os.OperatingSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * Project extension to configureAfterEvaluate Python build environment.
  *

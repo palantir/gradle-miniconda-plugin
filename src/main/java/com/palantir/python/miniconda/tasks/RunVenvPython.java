@@ -15,26 +15,20 @@
  */
 
 package com.palantir.python.miniconda.tasks;
+
 import java.nio.file.Path;
-import org.gradle.api.tasks.Input;
+import org.gradle.api.tasks.Internal;
 
 
 /**
- * A configurable task that makes it easy to run a command in the miniconda virtual environment.
+ * A task to be used when running python from the miniconda virtual environment.
  *
  * @author Ivan Atanasov
  */
-public class RunVenvCommand extends AbstractRunVenvCommand {
+public class RunVenvPython extends AbstractRunVenvCommand {
 
-    @Input
-    private String executable;
-
+    @Internal
     protected Path getExecutable() {
-        return getMiniconda().getBuildEnvironmentDirectory().toPath()
-                .resolve(getMiniconda().getScriptsRelativeDir() + "/" + executable);
-    }
-
-    public void setExecutable(String executable) {
-        this.executable = executable;
+        return getMiniconda().getBuildEnvironmentDirectory().toPath().resolve(getMiniconda().getPythonRelativePath());
     }
 }
