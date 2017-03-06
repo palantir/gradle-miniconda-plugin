@@ -1,0 +1,17 @@
+package:
+  name: example-project
+  version: "1.0.0"
+
+source:
+  path: ..
+
+requirements:
+  build:
+    - python
+    - setuptools
+  run:
+    - coverage
+
+test:
+  imports:
+    - example-project

@@ -38,6 +38,7 @@ public class MinicondaExtension {
     private static final File DEFAULT_BOOTSTRAP_DIRECTORY_PREFIX =
             new File(System.getProperty("user.home"), ".miniconda-bootstrap");
     private static final String DEFAULT_BUILD_ENVIRONMENT_DIRECTORY = "build/miniconda";
+    private static final String DEFAULT_CONDA_BUILD_OUTPUT_DIRECTORY = "build/conda-output";
     private static final int DEFAULT_PYTHON_VERSION = 2;
 
     private final Project project;
@@ -46,6 +47,7 @@ public class MinicondaExtension {
     private int pythonVersion = DEFAULT_PYTHON_VERSION;
     private File bootstrapDirectoryPrefix = DEFAULT_BOOTSTRAP_DIRECTORY_PREFIX;
     private File buildEnvironmentDirectory = null;
+    private File condaBuildOutputDirectory = null;
     private List<String> packages = new ArrayList<>();
     private List<String> channels = new ArrayList<>(Collections.singletonList(DEFAULT_CHANNEL));
 
@@ -112,6 +114,17 @@ public class MinicondaExtension {
 
     public void setBuildEnvironmentDirectory(File buildEnvironmentDirectory) {
         this.buildEnvironmentDirectory = buildEnvironmentDirectory;
+    }
+
+    public File getCondaBuildOutputDirectory() {
+        if (condaBuildOutputDirectory == null) {
+            return project.file(DEFAULT_CONDA_BUILD_OUTPUT_DIRECTORY);
+        }
+        return condaBuildOutputDirectory;
+    }
+
+    public void setCondaBuildOutputDirectory(File condaBuildOutputDirectory) {
+        this.condaBuildOutputDirectory = condaBuildOutputDirectory;
     }
 
     public String getMinicondaVersion() {

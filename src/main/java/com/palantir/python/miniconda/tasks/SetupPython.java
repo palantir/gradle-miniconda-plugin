@@ -17,9 +17,7 @@
 package com.palantir.python.miniconda.tasks;
 
 import com.palantir.python.miniconda.MinicondaExtension;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import com.palantir.python.miniconda.MinicondaUtils;
 import java.util.Objects;
 import org.gradle.api.Action;
 import org.gradle.api.Task;
@@ -61,10 +59,12 @@ public class SetupPython extends AbstractExecTask<SetupPython> {
 
         getInputs().property("packages", miniconda.getPackages());
         getOutputs().dir(miniconda.getBuildEnvironmentDirectory());
+
+
         executable(miniconda.getBootstrapDirectory().toPath().resolve("bin/conda"));
         args("create", "--yes", "--quiet", "-p", miniconda.getBuildEnvironmentDirectory());
         args("--override-channels");
-        args(convertChannelsToArgs(miniconda.getChannels()));
+        args(MinicondaUtils.convertChannelsToArgs(miniconda.getChannels()));
         args(miniconda.getPackages());
 
         doFirst(new Action<Task>() {
@@ -77,14 +77,5 @@ public class SetupPython extends AbstractExecTask<SetupPython> {
             }
         });
         LOG.info("{} configured to execute {}", getName(), getCommandLine());
-    }
-
-    private static List<String> convertChannelsToArgs(List<String> channels) {
-        List<String> args = new ArrayList<>();
-        for (String channel : channels) {
-            args.add("--channel");
-            args.add(channel);
-        }
-        return Collections.unmodifiableList(args);
     }
 }

@@ -1,0 +1,8 @@
+plugins {
+    id 'com.palantir.python.miniconda'
+}
+
+miniconda {
+    minicondaVersion = '3.18.3'
+    packages = ['python']
+}
