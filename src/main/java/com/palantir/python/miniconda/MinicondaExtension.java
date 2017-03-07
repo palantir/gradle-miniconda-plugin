@@ -18,6 +18,7 @@ package com.palantir.python.miniconda;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -38,6 +39,7 @@ public class MinicondaExtension {
     private static final File DEFAULT_BOOTSTRAP_DIRECTORY_PREFIX =
             new File(System.getProperty("user.home"), ".miniconda-bootstrap");
     private static final String DEFAULT_BUILD_ENVIRONMENT_DIRECTORY = "build/miniconda";
+    private static final String DEFAULT_META_YAML_FILE_PATH = "conda_recipe/meta.yaml";
     private static final int DEFAULT_PYTHON_VERSION = 2;
 
     private final Project project;
@@ -46,6 +48,7 @@ public class MinicondaExtension {
     private int pythonVersion = DEFAULT_PYTHON_VERSION;
     private File bootstrapDirectoryPrefix = DEFAULT_BOOTSTRAP_DIRECTORY_PREFIX;
     private File buildEnvironmentDirectory = null;
+    private Path metaYaml = null;
     private List<String> packages = new ArrayList<>();
     private List<String> channels = new ArrayList<>(Collections.singletonList(DEFAULT_CHANNEL));
 
@@ -100,6 +103,25 @@ public class MinicondaExtension {
             return project.file(DEFAULT_BUILD_ENVIRONMENT_DIRECTORY);
         }
         return buildEnvironmentDirectory;
+    }
+
+    public void setMetaYaml(Path metaYaml) {
+        this.metaYaml = metaYaml;
+    }
+
+    public void setMetaYaml(File metaYaml) {
+        setMetaYaml(metaYaml.toPath());
+    }
+
+    public void setMetaYaml(String metaYaml) {
+        setMetaYaml(Paths.get(metaYaml));
+    }
+
+    public Path getMetaYaml() {
+        if (metaYaml == null) {
+            return project.file(DEFAULT_META_YAML_FILE_PATH).toPath();
+        }
+        return metaYaml;
     }
 
     public void setBuildEnvironmentDirectory(String buildEnvironmentDirectory) {

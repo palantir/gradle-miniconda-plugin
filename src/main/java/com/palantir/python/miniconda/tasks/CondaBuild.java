@@ -25,7 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Task which builds and packages a Conda project.
+ * Task which builds and packages a Conda package.
  *
  * @author jakobjuelich
  */
@@ -56,7 +56,7 @@ public class CondaBuild extends AbstractExecTask<CondaBuild> {
         Objects.requireNonNull(miniconda, "miniconda must not be null");
 
         executable(miniconda.getBuildEnvironmentDirectory().toPath().resolve("bin/conda"));
-        args("build", "--quiet", getProject().getProjectDir().toPath().resolve("conda_recipe/meta.yaml"));
+        args("build", miniconda.getMetaYaml());
         args("--override-channels");
         args(MinicondaUtils.convertChannelsToArgs(miniconda.getChannels()));
 
