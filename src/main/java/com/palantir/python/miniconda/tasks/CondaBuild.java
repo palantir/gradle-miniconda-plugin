@@ -24,7 +24,11 @@ import org.gradle.api.tasks.TaskContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+/**
+ * Task which builds and packages a Conda project.
+ *
+ * @author jakobjuelich
+ */
 public class CondaBuild extends AbstractExecTask<CondaBuild> {
     private static final Logger LOG = LoggerFactory.getLogger(CondaBuild.class);
 
@@ -44,20 +48,20 @@ public class CondaBuild extends AbstractExecTask<CondaBuild> {
         return task;
     }
 
+    public CondaBuild() {
+        super(CondaBuild.class);
+    }
+
     public void configureAfterEvaluate(final MinicondaExtension miniconda) {
         Objects.requireNonNull(miniconda, "miniconda must not be null");
 
         executable(miniconda.getBootstrapDirectory().toPath().resolve("bin/conda"));
-        args(
-                "build", "--quiet", "-p", getProject().getProjectDir().toPath().resolve("conda_recipe/meta.yaml"),
-                "--override-channels", "--output-folder", miniconda.getCondaBuildOutputDirectory());
+        args("build", "--quiet", "-p", getProject().getProjectDir().toPath().resolve("conda_recipe/meta.yaml"));
+        args("--output-folder", miniconda.getCondaBuildOutputDirectory());
+        args("--override-channels");
         args(MinicondaUtils.convertChannelsToArgs(miniconda.getChannels()));
 
         LOG.info("{} configured to execute {}", getName(), getCommandLine());
-    }
-
-    public CondaBuild() {
-        super(CondaBuild.class);
     }
 
 }

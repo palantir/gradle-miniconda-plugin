@@ -51,8 +51,6 @@ repositories {
 dependencies {
     compile gradleApi()
 
-    compile 'com.google.guava:guava:19.0'
-
     testCompile('com.netflix.nebula:nebula-test:4.2.2') {
         exclude group: 'org.codehaus.groovy'
     }

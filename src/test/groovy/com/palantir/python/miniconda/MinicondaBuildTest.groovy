@@ -29,7 +29,7 @@ import spock.lang.Specification
 /**
  * Functional tests for the Miniconda build command.
  *
- * @author jjuelich
+ * @author jakobjuelich
  */
 class MinicondaBuildTest extends Specification {
     private static final Logger LOG = LoggerFactory.getLogger(MinicondaBuildTest.class);

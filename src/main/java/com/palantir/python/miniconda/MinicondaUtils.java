@@ -20,9 +20,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Created by jjuelich on 3/6/17.
- */
 public final class MinicondaUtils {
 
     public static List<String> convertChannelsToArgs(List<String> channels) {
