@@ -19,6 +19,7 @@ package com.palantir.python.miniconda;
 import com.palantir.python.miniconda.tasks.BootstrapPython;
 import com.palantir.python.miniconda.tasks.CleanTaskUtils;
 import com.palantir.python.miniconda.tasks.CondaBuild;
+import com.palantir.python.miniconda.tasks.SetupCondaBuild;
 import com.palantir.python.miniconda.tasks.SetupPython;
 import org.gradle.api.Action;
 import org.gradle.api.Plugin;
@@ -52,7 +53,8 @@ public class MinicondaPlugin implements Plugin<Project> {
         TaskContainer tasks = project.getTasks();
         BootstrapPython bootstrapPython = BootstrapPython.createTask(tasks);
         SetupPython setupPython = SetupPython.createTask(tasks, bootstrapPython);
-        CondaBuild condaBuild = CondaBuild.createTask(tasks, setupPython);
+        SetupCondaBuild setupCondaBuild = SetupCondaBuild.createTask(tasks, setupPython);
+        CondaBuild condaBuild = CondaBuild.createTask(tasks, setupCondaBuild);
 
         Task cleanBootstrapPython = project.getTasks().getByName(CleanTaskUtils.getCleanTaskName(bootstrapPython));
         Task cleanSetupPython = project.getTasks().getByName(CleanTaskUtils.getCleanTaskName(setupPython));
@@ -62,7 +64,7 @@ public class MinicondaPlugin implements Plugin<Project> {
 
         LOG.debug("MinicondaPlugin tasks created.");
         Configuration configuration = project.getConfigurations().create(CONFIGURATION_NAME);
-        project.afterEvaluate(new AfterEvaluateAction(OS, configuration, bootstrapPython, setupPython, condaBuild));
+        project.afterEvaluate(new AfterEvaluateAction(OS, configuration, bootstrapPython, setupPython, setupCondaBuild, condaBuild));
     }
 
     private static void createIvyRepository(Project project) {

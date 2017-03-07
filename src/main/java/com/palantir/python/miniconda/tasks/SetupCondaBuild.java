@@ -25,42 +25,44 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Task which builds and packages a Conda project.
+ * Installs conda-build.
  *
- * @author jakobjuelich
+ * This can not be installed in an environment so we need a separate task for it.
+ *
+ * Created by jakobjuelich on 3/7/17.
  */
-public class CondaBuild extends AbstractExecTask<CondaBuild> {
+public class SetupCondaBuild extends AbstractExecTask<SetupCondaBuild> {
+
     private static final Logger LOG = LoggerFactory.getLogger(CondaBuild.class);
 
     private static final String DEFAULT_GROUP = "build";
-    private static final String DEFAULT_DESCRIPTION = "Builds conda package using conda-build.";
+    private static final String DEFAULT_DESCRIPTION = "Installs conda-build.";
 
-    public static CondaBuild createTask(TaskContainer tasks, SetupCondaBuild setupCondaBuild) {
+    public static SetupCondaBuild createTask(TaskContainer tasks, SetupPython setupPython) {
         Objects.requireNonNull(tasks, "tasks must not be null");
-        Objects.requireNonNull(setupCondaBuild, "setupCondaBuild must not be null");
+        Objects.requireNonNull(setupPython, "setupPython must not be null");
 
-        CondaBuild task = tasks.create("condaBuild", CondaBuild.class);
+        SetupCondaBuild task = tasks.create("setupCondaBuild", SetupCondaBuild.class);
         task.setGroup(DEFAULT_GROUP);
         task.setDescription(DEFAULT_DESCRIPTION);
-        task.dependsOn(setupCondaBuild);
+        task.dependsOn(setupPython);
 
         CleanTaskUtils.createCleanupTask(tasks, task);
         return task;
     }
 
-    public CondaBuild() {
-        super(CondaBuild.class);
+    public SetupCondaBuild() {
+        super(SetupCondaBuild.class);
     }
 
     public void configureAfterEvaluate(final MinicondaExtension miniconda) {
         Objects.requireNonNull(miniconda, "miniconda must not be null");
 
         executable(miniconda.getBuildEnvironmentDirectory().toPath().resolve("bin/conda"));
-        args("build", "--quiet", getProject().getProjectDir().toPath().resolve("conda_recipe/meta.yaml"));
+        args("install", "--quiet", "--yes", "conda-build");
         args("--override-channels");
         args(MinicondaUtils.convertChannelsToArgs(miniconda.getChannels()));
 
         LOG.info("{} configured to execute {}", getName(), getCommandLine());
     }
-
 }

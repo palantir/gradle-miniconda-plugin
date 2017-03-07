@@ -64,8 +64,11 @@ Installs Miniconda.
 ### setupPython
 Sets up conda environment in the project running `conda create`.
 
+### condaBuildSetup
+Installs conda-build using `conda install conda-build`.
+
 ### condaBuild
-Builds and packages the project using `conda build`. The location of the built package can be changed through condaBuildOutputDirectory, default is build/conda-output.
+Builds and packages the project using `conda build`.
 
 License
 -------

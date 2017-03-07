@@ -60,6 +60,5 @@ class MinicondaBuildTest extends Specification {
         then:
         result.task(":setupPython").outcome == TaskOutcome.SUCCESS
         result.task(":condaBuild").outcome == TaskOutcome.SUCCESS
-        new File("$tempDirectory/build/conda-output/osx-64/example-project-1.0.0-0.tar.bz2").exists()
     }
 }

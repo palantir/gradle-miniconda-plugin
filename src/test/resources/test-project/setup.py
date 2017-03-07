@@ -2,7 +2,7 @@
 from setuptools import find_packages, setup
 
 setup(
-    name='example-project',
+    name='example_project',
     description='Amazing thing',
     author='Me',
     packages=find_packages(),

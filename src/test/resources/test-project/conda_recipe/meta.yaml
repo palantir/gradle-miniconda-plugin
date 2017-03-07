@@ -1,5 +1,5 @@
 package:
-  name: example-project
+  name: example_project
   version: "1.0.0"
 
 source:
@@ -14,4 +14,4 @@ requirements:
 
 test:
   imports:
-    - example-project
+    - example_project
