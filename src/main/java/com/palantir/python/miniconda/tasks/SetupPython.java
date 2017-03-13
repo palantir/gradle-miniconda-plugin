@@ -64,7 +64,7 @@ public class SetupPython extends AbstractExecTask<SetupPython> {
         getInputs().property("packages", miniconda.getPackages());
         getOutputs().dir(miniconda.getBuildEnvironmentDirectory());
         Path condaPath = miniconda.getBootstrapDirectory().toPath()
-                .resolve(miniconda.getScriptsRelativeDir() + "/conda");
+                .resolve(miniconda.getScriptsRelativeDir()).resolve("conda");
         if (miniconda.getOs().isWindows()) {
             executable("cmd");
             args("/c", condaPath);

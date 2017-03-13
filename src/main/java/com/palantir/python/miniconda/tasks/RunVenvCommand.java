@@ -16,6 +16,7 @@
 
 package com.palantir.python.miniconda.tasks;
 import java.nio.file.Path;
+
 import org.gradle.api.tasks.Input;
 
 
@@ -31,7 +32,7 @@ public class RunVenvCommand extends AbstractRunVenvCommand {
 
     protected Path getExecutable() {
         return getMiniconda().getBuildEnvironmentDirectory().toPath()
-                .resolve(getMiniconda().getScriptsRelativeDir() + "/" + executable);
+                .resolve(getMiniconda().getScriptsRelativeDir()).resolve(executable);
     }
 
     public void setExecutable(String executable) {

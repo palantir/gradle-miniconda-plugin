@@ -18,6 +18,7 @@ package com.palantir.python.miniconda;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -148,19 +149,19 @@ public class MinicondaExtension {
         this.channels = channels;
     }
 
-    public String getPythonRelativePath() {
+    public Path getPythonRelativePath() {
         if (os.isWindows()) {
-            return "python";
+            return Paths.get("python");
         } else {
-            return "bin/python";
+            return Paths.get("bin", "python");
         }
     }
 
-    public String getScriptsRelativeDir() {
+    public Path getScriptsRelativeDir() {
         if (os.isWindows()) {
-            return "Scripts";
+            return Paths.get("Scripts");
         } else {
-            return "bin";
+            return Paths.get("bin");
         }
     }
 
