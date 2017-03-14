@@ -59,6 +59,9 @@ public class CondaBuild extends AbstractExecTask<CondaBuild> {
         args("build", miniconda.getMetaYaml());
         args("--override-channels");
         args(MinicondaUtils.convertChannelsToArgs(miniconda.getChannels()));
+        if (miniconda.getBuildOutputDirectory() != null) {
+            args("--output-folder", miniconda.getBuildOutputDirectory().getAbsolutePath());
+        }
 
         LOG.info("{} configured to execute {}", getName(), getCommandLine());
     }

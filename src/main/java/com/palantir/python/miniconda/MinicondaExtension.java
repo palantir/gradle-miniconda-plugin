@@ -48,6 +48,7 @@ public class MinicondaExtension {
     private int pythonVersion = DEFAULT_PYTHON_VERSION;
     private File bootstrapDirectoryPrefix = DEFAULT_BOOTSTRAP_DIRECTORY_PREFIX;
     private File buildEnvironmentDirectory = null;
+    private File buildOutputDirectory = null;
     private Path metaYaml = null;
     private List<String> packages = new ArrayList<>();
     private List<String> channels = new ArrayList<>(Collections.singletonList(DEFAULT_CHANNEL));
@@ -105,6 +106,10 @@ public class MinicondaExtension {
         return buildEnvironmentDirectory;
     }
 
+    public File getBuildOutputDirectory() {
+        return buildOutputDirectory;
+    }
+
     public void setMetaYaml(Path metaYaml) {
         this.metaYaml = metaYaml;
     }
@@ -134,6 +139,18 @@ public class MinicondaExtension {
 
     public void setBuildEnvironmentDirectory(File buildEnvironmentDirectory) {
         this.buildEnvironmentDirectory = buildEnvironmentDirectory;
+    }
+
+    public void setBuildOutputDirectory(String buildOutputDirectory) {
+        setBuildOutputDirectory(new File(buildOutputDirectory));
+    }
+
+    public void setBuildOutputDirectory(Path buildOutputDirectory) {
+        setBuildOutputDirectory(buildOutputDirectory.toFile());
+    }
+
+    public void setBuildOutputDirectory(File buildOutputDirectory) {
+        this.buildOutputDirectory = buildOutputDirectory;
     }
 
     public String getMinicondaVersion() {

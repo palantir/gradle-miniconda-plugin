@@ -60,5 +60,8 @@ class MinicondaBuildTest extends Specification {
         then:
         result.task(":setupPython").outcome == TaskOutcome.SUCCESS
         result.task(":condaBuild").outcome == TaskOutcome.SUCCESS
+
+        FileUtils.listFiles(
+                tempDirectory.toPath().resolve("build/output").toFile(), ["tar.bz2"] as String[], true).size() == 1
     }
 }
