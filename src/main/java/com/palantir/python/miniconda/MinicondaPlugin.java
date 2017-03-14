@@ -64,7 +64,8 @@ public class MinicondaPlugin implements Plugin<Project> {
 
         LOG.debug("MinicondaPlugin tasks created.");
         Configuration configuration = project.getConfigurations().create(CONFIGURATION_NAME);
-        project.afterEvaluate(new AfterEvaluateAction(OS, configuration, bootstrapPython, setupPython, setupCondaBuild, condaBuild));
+        project.afterEvaluate(
+                new AfterEvaluateAction(OS, configuration, bootstrapPython, setupPython, setupCondaBuild, condaBuild));
     }
 
     private static void createIvyRepository(Project project) {

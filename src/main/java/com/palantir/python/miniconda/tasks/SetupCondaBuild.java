@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
  */
 public class SetupCondaBuild extends AbstractExecTask<SetupCondaBuild> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(CondaBuild.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SetupCondaBuild.class);
 
     private static final String DEFAULT_GROUP = "build";
     private static final String DEFAULT_DESCRIPTION = "Installs conda-build.";
