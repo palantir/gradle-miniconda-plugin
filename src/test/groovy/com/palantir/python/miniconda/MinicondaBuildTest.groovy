@@ -16,8 +16,11 @@
 
 package com.palantir.python.miniconda
 
+import static groovy.test.GroovyAssert.shouldFail
+
 import java.nio.file.Files
 import java.nio.file.Paths
+import java.nio.file.StandardOpenOption
 import org.apache.commons.io.FileUtils
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
@@ -63,5 +66,39 @@ class MinicondaBuildTest extends Specification {
 
         FileUtils.listFiles(
                 tempDirectory.toPath().resolve("build/output").toFile(), ["tar.bz2"] as String[], true).size() == 1
+    }
+
+    def 'build with broken recipe should fail'() {
+        when:
+        Files.write(
+                tempDirectory.toPath().resolve("conda_recipe/meta.yaml"),
+                "\n\nsome text to break the yaml".getBytes(), StandardOpenOption.APPEND);
+        def runner = GradleRunner.create()
+                .withProjectDir(tempDirectory)
+                .withArguments("--debug", ":condaBuild")
+                .withPluginClasspath()
+
+        shouldFail (org.gradle.testkit.runner.UnexpectedBuildFailure) {
+            runner.build()
+        }
+        then:
+        1 == 1
+    }
+
+    def 'second setupCondaBuild up to date'() {
+        when:
+        def runner = GradleRunner.create()
+                .withProjectDir(tempDirectory)
+                .withArguments("--debug", ":setupCondaBuild")
+                .withPluginClasspath()
+        BuildResult firstResult = runner.build()
+        LOG.info(firstResult.getOutput())
+
+        BuildResult secondResult = runner.build()
+        LOG.info(secondResult.getOutput())
+
+        then:
+        firstResult.task(":setupCondaBuild").outcome == TaskOutcome.SUCCESS
+        secondResult.task(":setupCondaBuild").outcome == TaskOutcome.UP_TO_DATE
     }
 }

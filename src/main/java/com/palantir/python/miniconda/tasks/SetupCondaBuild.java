@@ -18,9 +18,13 @@ package com.palantir.python.miniconda.tasks;
 
 import com.palantir.python.miniconda.MinicondaExtension;
 import com.palantir.python.miniconda.MinicondaUtils;
+import java.nio.file.Path;
 import java.util.Objects;
+import org.gradle.api.Task;
+import org.gradle.api.specs.Spec;
 import org.gradle.api.tasks.AbstractExecTask;
 import org.gradle.api.tasks.TaskContainer;
+import org.gradle.process.internal.ExecAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,11 +62,24 @@ public class SetupCondaBuild extends AbstractExecTask<SetupCondaBuild> {
     public void configureAfterEvaluate(final MinicondaExtension miniconda) {
         Objects.requireNonNull(miniconda, "miniconda must not be null");
 
-        executable(miniconda.getBuildEnvironmentDirectory().toPath().resolve("bin/conda"));
+        final Path condaExec = miniconda.getBuildEnvironmentDirectory().toPath().resolve("bin/conda");
+        executable(condaExec);
         args("install", "--quiet", "--yes", "conda-build");
         args("--override-channels");
         args(MinicondaUtils.convertChannelsToArgs(miniconda.getChannels()));
 
         LOG.info("{} configured to execute {}", getName(), getCommandLine());
+
+
+        this.getOutputs().upToDateWhen(new Spec<Task>() {
+            @Override
+            public boolean isSatisfiedBy(Task task) {
+                ExecAction execAction = SetupCondaBuild.this.getExecActionFactory().newExecAction();
+                execAction.executable(condaExec);
+                execAction.args("build", "-V"); // will error if build is not installed, otherwise just print stuff
+
+                return 0 == execAction.execute().getExitValue();
+            }
+        });
     }
 }

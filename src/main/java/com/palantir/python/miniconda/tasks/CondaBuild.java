@@ -58,6 +58,7 @@ public class CondaBuild extends AbstractExecTask<CondaBuild> {
         executable(miniconda.getBuildEnvironmentDirectory().toPath().resolve("bin/conda"));
         args("build", miniconda.getMetaYaml());
         args("--override-channels");
+        args("--no-anaconda-upload");
         args(MinicondaUtils.convertChannelsToArgs(miniconda.getChannels()));
         if (miniconda.getBuildOutputDirectory() != null) {
             args("--output-folder", miniconda.getBuildOutputDirectory().getAbsolutePath());
