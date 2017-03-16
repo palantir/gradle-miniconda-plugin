@@ -54,6 +54,8 @@ dependencies {
     testCompile('com.netflix.nebula:nebula-test:4.2.2') {
         exclude group: 'org.codehaus.groovy'
     }
+
+    testCompile 'com.google.code.findbugs:annotations:3.0.1'
 }
 
 pluginBundle {
@@ -67,9 +69,4 @@ pluginBundle {
             displayName = 'Gradle Miniconda plugin'
         }
     }
-}
-
-test {
-    maxParallelForks = 10
-    forkEvery = 1
 }

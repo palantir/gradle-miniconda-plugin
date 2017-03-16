@@ -17,6 +17,9 @@
 package com.palantir.python.miniconda;
 
 import com.palantir.python.miniconda.tasks.BootstrapPython;
+import com.palantir.python.miniconda.tasks.CondaBuild;
+import com.palantir.python.miniconda.tasks.CondaBuildCheck;
+import com.palantir.python.miniconda.tasks.SetupCondaBuild;
 import com.palantir.python.miniconda.tasks.SetupPython;
 import org.gradle.api.Action;
 import org.gradle.api.Project;
@@ -35,16 +38,25 @@ public class AfterEvaluateAction implements Action<Project> {
     private final Configuration configuration;
     private final BootstrapPython bootstrapPython;
     private final SetupPython setupPython;
+    private final SetupCondaBuild setupCondaBuild;
+    private final CondaBuildCheck condaBuildCheck;
+    private final CondaBuild condaBuild;
 
     public AfterEvaluateAction(
             OperatingSystem os,
             Configuration configuration,
             BootstrapPython bootstrapPython,
-            SetupPython setupPython) {
+            SetupPython setupPython,
+            SetupCondaBuild setupCondaBuild,
+            CondaBuildCheck condaBuildCheck,
+            CondaBuild condaBuild) {
         this.os = os;
         this.configuration = configuration;
         this.bootstrapPython = bootstrapPython;
         this.setupPython = setupPython;
+        this.setupCondaBuild = setupCondaBuild;
+        this.condaBuildCheck = condaBuildCheck;
+        this.condaBuild = condaBuild;
     }
 
     @Override
@@ -55,6 +67,9 @@ public class AfterEvaluateAction implements Action<Project> {
         addMinicondaInstallerDependency(project, miniconda);
         bootstrapPython.configureAfterEvaluate(miniconda, configuration.getSingleFile(), os);
         setupPython.configureAfterEvaluate(miniconda);
+        setupCondaBuild.configureAfterEvaluate(miniconda);
+        condaBuildCheck.configureAfterEvaluate(miniconda);
+        condaBuild.configureAfterEvaluate(miniconda);
     }
 
     private void addMinicondaInstallerDependency(final Project project, final MinicondaExtension miniconda) {

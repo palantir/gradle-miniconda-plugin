@@ -55,6 +55,24 @@ miniconda {
 If you need to customize where the Miniconda installer script is downloaded from, you can add your artifact to the `minicondaInstaller`
 configuration. The default location where it is downloaded from is: [`https://repo.continuum.io`](https://repo.continuum.io).
 
+Tasks
+-----
+
+### bootstrapPython
+Installs Miniconda.
+
+### setupPython
+Sets up conda environment in the project running `conda create`.
+
+### condaBuildSetup
+Installs conda-build using `conda install conda-build`.
+
+### condaBuildCheck
+Only checks (validates) the recipe.
+
+### condaBuild
+Builds and packages the project using `conda build`.
+
 License
 -------
 
