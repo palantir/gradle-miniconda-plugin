@@ -18,13 +18,14 @@ package com.palantir.python.miniconda
 
 import static groovy.test.GroovyAssert.shouldFail
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings
 import java.nio.file.Files
 import java.nio.file.Paths
-import java.nio.file.StandardOpenOption
 import org.apache.commons.io.FileUtils
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
+import org.gradle.testkit.runner.UnexpectedBuildFailure
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import spock.lang.Specification
@@ -68,19 +69,22 @@ class MinicondaBuildTest extends Specification {
                 tempDirectory.toPath().resolve("build/output").toFile(), ["tar.bz2"] as String[], true).size() == 1
     }
 
+    @SuppressFBWarnings
     def 'build with broken recipe should fail'() {
         when:
-        Files.write(
-                tempDirectory.toPath().resolve("conda_recipe/meta.yaml"),
-                "\n\nsome text to break the yaml".getBytes(), StandardOpenOption.APPEND);
+        // `conda build` exits with 0, even if meta.yaml doesn't exist. CondaBuildCheck should catch this.
+        tempDirectory.toPath().resolve("conda_recipe/meta.yaml").toFile().delete();
+
         def runner = GradleRunner.create()
                 .withProjectDir(tempDirectory)
                 .withArguments("--debug", ":condaBuild")
                 .withPluginClasspath()
 
-        shouldFail (org.gradle.testkit.runner.UnexpectedBuildFailure) {
+
+        shouldFail(UnexpectedBuildFailure) {
             runner.build()
         }
+
         then:
         1 == 1
     }

@@ -18,6 +18,7 @@ package com.palantir.python.miniconda;
 
 import com.palantir.python.miniconda.tasks.BootstrapPython;
 import com.palantir.python.miniconda.tasks.CondaBuild;
+import com.palantir.python.miniconda.tasks.CondaBuildCheck;
 import com.palantir.python.miniconda.tasks.SetupCondaBuild;
 import com.palantir.python.miniconda.tasks.SetupPython;
 import org.gradle.api.Action;
@@ -38,6 +39,7 @@ public class AfterEvaluateAction implements Action<Project> {
     private final BootstrapPython bootstrapPython;
     private final SetupPython setupPython;
     private final SetupCondaBuild setupCondaBuild;
+    private final CondaBuildCheck condaBuildCheck;
     private final CondaBuild condaBuild;
 
     public AfterEvaluateAction(
@@ -46,12 +48,14 @@ public class AfterEvaluateAction implements Action<Project> {
             BootstrapPython bootstrapPython,
             SetupPython setupPython,
             SetupCondaBuild setupCondaBuild,
+            CondaBuildCheck condaBuildCheck,
             CondaBuild condaBuild) {
         this.os = os;
         this.configuration = configuration;
         this.bootstrapPython = bootstrapPython;
         this.setupPython = setupPython;
         this.setupCondaBuild = setupCondaBuild;
+        this.condaBuildCheck = condaBuildCheck;
         this.condaBuild = condaBuild;
     }
 
@@ -64,6 +68,7 @@ public class AfterEvaluateAction implements Action<Project> {
         bootstrapPython.configureAfterEvaluate(miniconda, configuration.getSingleFile(), os);
         setupPython.configureAfterEvaluate(miniconda);
         setupCondaBuild.configureAfterEvaluate(miniconda);
+        condaBuildCheck.configureAfterEvaluate(miniconda);
         condaBuild.configureAfterEvaluate(miniconda);
     }
 

@@ -67,6 +67,9 @@ Sets up conda environment in the project running `conda create`.
 ### condaBuildSetup
 Installs conda-build using `conda install conda-build`.
 
+### condaBuildCheck
+Only checks (validates) the recipe.
+
 ### condaBuild
 Builds and packages the project using `conda build`.
 

@@ -17,7 +17,6 @@
 package com.palantir.python.miniconda.tasks;
 
 import com.palantir.python.miniconda.MinicondaExtension;
-import com.palantir.python.miniconda.MinicondaUtils;
 import java.util.Objects;
 import org.gradle.api.tasks.AbstractExecTask;
 import org.gradle.api.tasks.TaskContainer;
@@ -25,31 +24,31 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Task which builds and packages a Conda package.
+ * Task to run conda build --check to only check (validate) the recipe.
  *
  * @author jakobjuelich
  */
-public class CondaBuild extends AbstractExecTask<CondaBuild> {
-    private static final Logger LOG = LoggerFactory.getLogger(CondaBuild.class);
+public class CondaBuildCheck extends AbstractExecTask<CondaBuildCheck> {
+    private static final Logger LOG = LoggerFactory.getLogger(CondaBuildCheck.class);
 
     private static final String DEFAULT_GROUP = "build";
-    private static final String DEFAULT_DESCRIPTION = "Builds conda package using conda-build.";
+    private static final String DEFAULT_DESCRIPTION = "Runs `conda build --check` to only check (validate) the recipe.";
 
-    public static CondaBuild createTask(TaskContainer tasks, CondaBuildCheck condaBuildCheck) {
+    public static CondaBuildCheck createTask(TaskContainer tasks, SetupCondaBuild setupCondaBuild) {
         Objects.requireNonNull(tasks, "tasks must not be null");
-        Objects.requireNonNull(condaBuildCheck, "condaBuildCheck must not be null");
+        Objects.requireNonNull(setupCondaBuild, "setupCondaBuild must not be null");
 
-        CondaBuild task = tasks.create("condaBuild", CondaBuild.class);
+        CondaBuildCheck task = tasks.create("condaBuildCheck", CondaBuildCheck.class);
         task.setGroup(DEFAULT_GROUP);
         task.setDescription(DEFAULT_DESCRIPTION);
-        task.dependsOn(condaBuildCheck);
+        task.dependsOn(setupCondaBuild);
 
         CleanTaskUtils.createCleanupTask(tasks, task);
         return task;
     }
 
-    public CondaBuild() {
-        super(CondaBuild.class);
+    public CondaBuildCheck() {
+        super(CondaBuildCheck.class);
     }
 
     public void configureAfterEvaluate(final MinicondaExtension miniconda) {
@@ -57,12 +56,7 @@ public class CondaBuild extends AbstractExecTask<CondaBuild> {
 
         executable(miniconda.getBuildEnvironmentDirectory().toPath().resolve("bin/conda"));
         args("build", miniconda.getMetaYaml());
-        args("--override-channels");
-        args("--no-anaconda-upload");
-        args(MinicondaUtils.convertChannelsToArgs(miniconda.getChannels()));
-        if (miniconda.getBuildOutputDirectory() != null) {
-            args("--output-folder", miniconda.getBuildOutputDirectory().getAbsolutePath());
-        }
+        args("--check");
 
         LOG.info("{} configured to execute {}", getName(), getCommandLine());
     }
