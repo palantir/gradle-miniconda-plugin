@@ -39,7 +39,7 @@ public class MinicondaExtension {
     private static final File DEFAULT_BOOTSTRAP_DIRECTORY_PREFIX =
             new File(System.getProperty("user.home"), ".miniconda-bootstrap");
     private static final String DEFAULT_BUILD_ENVIRONMENT_DIRECTORY = "build/miniconda";
-    private static final String DEFAULT_META_YAML_FILE_PATH = "conda_recipe/meta.yaml";
+    private static final String DEFAULT_META_YAML_DIR = "conda_recipe/";
     private static final int DEFAULT_PYTHON_VERSION = 2;
 
     private final Project project;
@@ -124,7 +124,7 @@ public class MinicondaExtension {
 
     public Path getMetaYaml() {
         if (metaYaml == null) {
-            return project.file(DEFAULT_META_YAML_FILE_PATH).toPath();
+            return project.file(DEFAULT_META_YAML_DIR).toPath();
         }
         return metaYaml;
     }

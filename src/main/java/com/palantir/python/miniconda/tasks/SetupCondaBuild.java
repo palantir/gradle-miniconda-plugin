@@ -76,6 +76,7 @@ public class SetupCondaBuild extends AbstractExecTask<SetupCondaBuild> {
                 ExecAction execAction = SetupCondaBuild.this.getExecActionFactory().newExecAction();
                 execAction.executable(condaExec);
                 execAction.args("build", "-V"); // will error if build is not installed, otherwise just print stuff
+                execAction.setIgnoreExitValue(true);
 
                 return 0 == execAction.execute().getExitValue();
             }
