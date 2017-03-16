@@ -62,14 +62,13 @@ public class SetupCondaBuild extends AbstractExecTask<SetupCondaBuild> {
     public void configureAfterEvaluate(final MinicondaExtension miniconda) {
         Objects.requireNonNull(miniconda, "miniconda must not be null");
 
-        final Path condaExec = miniconda.getBuildEnvironmentDirectory().toPath().resolve("bin/conda");
+        final Path condaExec = miniconda.getBootstrapDirectory().toPath().resolve("bin/conda");
         executable(condaExec);
         args("install", "--quiet", "--yes", "conda-build");
         args("--override-channels");
         args(MinicondaUtils.convertChannelsToArgs(miniconda.getChannels()));
 
         LOG.info("{} configured to execute {}", getName(), getCommandLine());
-
 
         this.getOutputs().upToDateWhen(new Spec<Task>() {
             @Override
