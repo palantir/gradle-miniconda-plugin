@@ -14,7 +14,7 @@ dependencies:
 
 test:
   override:
-    - ./gradlew build
+    - ./gradlew build --info
   post:
     - mkdir -p "$CIRCLE_TEST_REPORTS/junit/"
     - cp build/test-results/test/*.xml "$CIRCLE_TEST_REPORTS/junit/"

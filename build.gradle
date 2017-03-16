@@ -70,8 +70,3 @@ pluginBundle {
         }
     }
 }
-
-test {
-    maxParallelForks = 10
-    forkEvery = 1
-}

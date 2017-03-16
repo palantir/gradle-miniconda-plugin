@@ -54,8 +54,9 @@ class MinicondaBuildTest extends Specification {
     def 'build package'() {
         when:
         def runner = GradleRunner.create()
+                .forwardOutput()
                 .withProjectDir(tempDirectory)
-                .withArguments("--debug", ":condaBuild")
+                .withArguments("--info", "--stacktrace", ":condaBuild")
                 .withPluginClasspath()
 
         BuildResult result = runner.build()
@@ -76,10 +77,10 @@ class MinicondaBuildTest extends Specification {
         tempDirectory.toPath().resolve("conda_recipe/meta.yaml").toFile().delete();
 
         def runner = GradleRunner.create()
+                .forwardOutput()
                 .withProjectDir(tempDirectory)
-                .withArguments("--debug", ":condaBuild")
+                .withArguments("--info", "--stacktrace", ":condaBuild")
                 .withPluginClasspath()
-
 
         shouldFail(UnexpectedBuildFailure) {
             runner.build()
@@ -92,8 +93,9 @@ class MinicondaBuildTest extends Specification {
     def 'second setupCondaBuild up to date'() {
         when:
         def runner = GradleRunner.create()
+                .forwardOutput()
                 .withProjectDir(tempDirectory)
-                .withArguments("--debug", ":setupCondaBuild")
+                .withArguments("--info", "--stacktrace", ":setupCondaBuild")
                 .withPluginClasspath()
         BuildResult firstResult = runner.build()
         LOG.info(firstResult.getOutput())
