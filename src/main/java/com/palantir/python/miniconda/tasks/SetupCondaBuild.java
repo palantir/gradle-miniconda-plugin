@@ -42,14 +42,14 @@ public class SetupCondaBuild extends AbstractExecTask<SetupCondaBuild> {
     private static final String DEFAULT_GROUP = "build";
     private static final String DEFAULT_DESCRIPTION = "Installs conda-build.";
 
-    public static SetupCondaBuild createTask(TaskContainer tasks, SetupPython setupPython) {
+    public static SetupCondaBuild createTask(TaskContainer tasks, BootstrapPython bootstrapPython) {
         Objects.requireNonNull(tasks, "tasks must not be null");
-        Objects.requireNonNull(setupPython, "setupPython must not be null");
+        Objects.requireNonNull(bootstrapPython, "bootstrapPython must not be null");
 
         SetupCondaBuild task = tasks.create("setupCondaBuild", SetupCondaBuild.class);
         task.setGroup(DEFAULT_GROUP);
         task.setDescription(DEFAULT_DESCRIPTION);
-        task.dependsOn(setupPython);
+        task.dependsOn(bootstrapPython);
 
         CleanTaskUtils.createCleanupTask(tasks, task);
         return task;

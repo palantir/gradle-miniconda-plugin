@@ -55,7 +55,7 @@ public class CondaBuild extends AbstractExecTask<CondaBuild> {
     public void configureAfterEvaluate(final MinicondaExtension miniconda) {
         Objects.requireNonNull(miniconda, "miniconda must not be null");
 
-        executable(miniconda.getBuildEnvironmentDirectory().toPath().resolve("bin/conda"));
+        executable(miniconda.getBootstrapDirectory().toPath().resolve("bin/conda"));
         args("build", miniconda.getMetaYaml());
         args("--override-channels");
         args("--no-anaconda-upload");
