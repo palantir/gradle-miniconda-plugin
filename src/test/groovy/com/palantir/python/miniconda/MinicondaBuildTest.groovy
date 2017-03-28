@@ -63,7 +63,6 @@ class MinicondaBuildTest extends Specification {
         LOG.info(result.getOutput())
 
         then:
-        result.task(":setupPython").outcome == TaskOutcome.SUCCESS
         result.task(":condaBuild").outcome == TaskOutcome.SUCCESS
 
         FileUtils.listFiles(
