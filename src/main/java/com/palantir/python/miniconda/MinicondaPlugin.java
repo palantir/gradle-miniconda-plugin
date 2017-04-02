@@ -56,7 +56,7 @@ public class MinicondaPlugin implements Plugin<Project> {
         BootstrapPython bootstrapPython = BootstrapPython.createTask(tasks);
         ConfigureRootCondaEnv configureCondaRootEnv = ConfigureRootCondaEnv.createTask(tasks, bootstrapPython);
         SetupPython setupPython = SetupPython.createTask(tasks, configureCondaRootEnv);
-        SetupCondaBuild setupCondaBuild = SetupCondaBuild.createTask(tasks, bootstrapPython);
+        SetupCondaBuild setupCondaBuild = SetupCondaBuild.createTask(tasks, configureCondaRootEnv);
         CondaBuildCheck condaBuildCheck = CondaBuildCheck.createTask(tasks, setupCondaBuild);
         CondaBuild condaBuild = CondaBuild.createTask(tasks, condaBuildCheck);
 

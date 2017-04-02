@@ -53,7 +53,7 @@ public class ConfigureRootCondaEnv extends DefaultTask {
 
     @OutputFile
     public File getOutputFile() {
-        return new File(miniconda.getBootstrapDirectoryPrefix(), ".condarc");
+        return new File(miniconda.getBootstrapDirectory(), ".condarc");
     }
 
     @TaskAction
