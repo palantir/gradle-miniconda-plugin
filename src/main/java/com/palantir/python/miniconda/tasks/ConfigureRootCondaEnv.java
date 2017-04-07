@@ -17,6 +17,7 @@
 package com.palantir.python.miniconda.tasks;
 
 import com.palantir.python.miniconda.MinicondaExtension;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -29,6 +30,7 @@ import org.gradle.api.tasks.TaskContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@SuppressFBWarnings("PT_EXTENDS_CONCRETE_TYPE")
 public class ConfigureRootCondaEnv extends DefaultTask {
 
     private static final Logger LOG = LoggerFactory.getLogger(ConfigureRootCondaEnv.class);
