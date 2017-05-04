@@ -71,8 +71,9 @@ class MinicondaFunctionalTest extends Specification {
 
         when:
         def runner = GradleRunner.create()
+                .forwardOutput()
                 .withProjectDir(tempDirectory)
-                .withArguments(":pythonVersion", ":condaEnvList")
+                .withArguments("--info", "--stacktrace", ":pythonVersion", ":condaEnvList")
                 .withPluginClasspath()
 
         BuildResult result = runner.build();

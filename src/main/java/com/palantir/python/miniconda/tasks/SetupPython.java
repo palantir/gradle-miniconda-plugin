@@ -17,11 +17,8 @@
 package com.palantir.python.miniconda.tasks;
 
 import com.palantir.python.miniconda.MinicondaExtension;
-
+import com.palantir.python.miniconda.MinicondaUtils;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Objects;
 import org.gradle.api.Action;
 import org.gradle.api.Task;
@@ -41,14 +38,14 @@ public class SetupPython extends AbstractExecTask<SetupPython> {
     private static final String DEFAULT_GROUP = "build";
     private static final String DEFAULT_DESCRIPTION = "Installs a conda env with specified packages.";
 
-    public static SetupPython createTask(TaskContainer tasks, BootstrapPython bootstrapPython) {
+    public static SetupPython createTask(TaskContainer tasks, ConfigureRootCondaEnv configureRootCondaEnv) {
         Objects.requireNonNull(tasks, "tasks must not be null");
-        Objects.requireNonNull(bootstrapPython, "bootstrapPython must not be null");
+        Objects.requireNonNull(configureRootCondaEnv, "bootstrapPython must not be null");
 
         SetupPython task = tasks.create("setupPython", SetupPython.class);
         task.setGroup(DEFAULT_GROUP);
         task.setDescription(DEFAULT_DESCRIPTION);
-        task.dependsOn(bootstrapPython);
+        task.dependsOn(configureRootCondaEnv);
 
         CleanTaskUtils.createCleanupTask(tasks, task);
         return task;
@@ -73,7 +70,7 @@ public class SetupPython extends AbstractExecTask<SetupPython> {
         }
         args("create", "--yes", "--quiet", "-p", miniconda.getBuildEnvironmentDirectory());
         args("--override-channels");
-        args(convertChannelsToArgs(miniconda.getChannels()));
+        args(MinicondaUtils.convertChannelsToArgs(miniconda.getChannels()));
         args(miniconda.getPackages());
 
         doFirst(new Action<Task>() {
@@ -86,14 +83,5 @@ public class SetupPython extends AbstractExecTask<SetupPython> {
             }
         });
         LOG.info("{} configured to execute {}", getName(), getCommandLine());
-    }
-
-    private static List<String> convertChannelsToArgs(List<String> channels) {
-        List<String> args = new ArrayList<>();
-        for (String channel : channels) {
-            args.add("--channel");
-            args.add(channel);
-        }
-        return Collections.unmodifiableList(args);
     }
 }

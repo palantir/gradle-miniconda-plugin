@@ -17,6 +17,10 @@
 package com.palantir.python.miniconda;
 
 import com.palantir.python.miniconda.tasks.BootstrapPython;
+import com.palantir.python.miniconda.tasks.CondaBuild;
+import com.palantir.python.miniconda.tasks.CondaBuildCheck;
+import com.palantir.python.miniconda.tasks.ConfigureRootCondaEnv;
+import com.palantir.python.miniconda.tasks.SetupCondaBuild;
 import com.palantir.python.miniconda.tasks.SetupPython;
 import org.gradle.api.Action;
 import org.gradle.api.Project;
@@ -34,17 +38,29 @@ public class AfterEvaluateAction implements Action<Project> {
     private final OperatingSystem os;
     private final Configuration configuration;
     private final BootstrapPython bootstrapPython;
+    private final ConfigureRootCondaEnv configureRootCondaEnv;
     private final SetupPython setupPython;
+    private final SetupCondaBuild setupCondaBuild;
+    private final CondaBuildCheck condaBuildCheck;
+    private final CondaBuild condaBuild;
 
     public AfterEvaluateAction(
             OperatingSystem os,
             Configuration configuration,
             BootstrapPython bootstrapPython,
-            SetupPython setupPython) {
+            ConfigureRootCondaEnv configureRootCondaEnv,
+            SetupPython setupPython,
+            SetupCondaBuild setupCondaBuild,
+            CondaBuildCheck condaBuildCheck,
+            CondaBuild condaBuild) {
         this.os = os;
         this.configuration = configuration;
         this.bootstrapPython = bootstrapPython;
+        this.configureRootCondaEnv = configureRootCondaEnv;
         this.setupPython = setupPython;
+        this.setupCondaBuild = setupCondaBuild;
+        this.condaBuildCheck = condaBuildCheck;
+        this.condaBuild = condaBuild;
     }
 
     @Override
@@ -54,7 +70,11 @@ public class AfterEvaluateAction implements Action<Project> {
 
         addMinicondaInstallerDependency(project, miniconda);
         bootstrapPython.configureAfterEvaluate(miniconda, configuration.getSingleFile(), os);
+        configureRootCondaEnv.configureAfterEvaluate(miniconda);
         setupPython.configureAfterEvaluate(miniconda);
+        setupCondaBuild.configureAfterEvaluate(miniconda);
+        condaBuildCheck.configureAfterEvaluate(miniconda);
+        condaBuild.configureAfterEvaluate(miniconda);
     }
 
     private void addMinicondaInstallerDependency(final Project project, final MinicondaExtension miniconda) {
