@@ -60,6 +60,7 @@ public class MinicondaExtension {
 
     public void validate() {
         Objects.requireNonNull(minicondaVersion, "miniconda.minicondaVersion must be set.");
+        Objects.requireNonNull(condaBuildVersion, "miniconda.condaBuildVersion must be set.");
         Objects.requireNonNull(bootstrapDirectoryPrefix, "miniconda.bootstrapDirectoryPrefix must not be null.");
         Objects.requireNonNull(packages, "miniconda.packages must not be null.");
         if (packages.isEmpty()) {

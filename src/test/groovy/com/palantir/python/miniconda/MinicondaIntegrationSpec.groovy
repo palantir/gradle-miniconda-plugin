@@ -47,6 +47,7 @@ class MinicondaIntegrationSpec extends IntegrationSpec {
                 bootstrapDirectoryPrefix = new File('$tempDirectory/bootstrap')
                 buildEnvironmentDirectory = new File('$tempDirectory/env')
                 minicondaVersion = '3.18.3'
+                condaBuildVersion = '2.1.9'
                 packages = ['ipython-notebook']
                 channels = ["${TestConstants.CHANNEL}"]
             }
@@ -67,6 +68,7 @@ class MinicondaIntegrationSpec extends IntegrationSpec {
                 bootstrapDirectoryPrefix = new File('$tempDirectory/bootstrap')
                 buildEnvironmentDirectory = new File('$tempDirectory/env')
                 minicondaVersion = '3.10.1'
+                condaBuildVersion = '2.1.9'
                 packages = ['ipython-notebook']
                 channels = ["${TestConstants.CHANNEL}"]
             }
@@ -87,6 +89,7 @@ class MinicondaIntegrationSpec extends IntegrationSpec {
                 bootstrapDirectoryPrefix = new File('$tempDirectory/bootstrap')
                 buildEnvironmentDirectory = new File('$tempDirectory/env')
                 minicondaVersion = '3.10.1'
+                condaBuildVersion = '2.1.9'
                 pythonVersion = 3
                 packages = ['python']
                 channels = ["${TestConstants.CHANNEL}"]
@@ -109,6 +112,7 @@ class MinicondaIntegrationSpec extends IntegrationSpec {
                 bootstrapDirectoryPrefix = new File('$tempDirectory/bootstrap')
                 buildEnvironmentDirectory = new File('$tempDirectory/env1')
                 minicondaVersion = '3.10.1'
+                condaBuildVersion = '2.1.9'
                 packages = ['python']
                 channels = ["${TestConstants.CHANNEL}"]
             }
@@ -120,6 +124,7 @@ class MinicondaIntegrationSpec extends IntegrationSpec {
                 bootstrapDirectoryPrefix = new File('$tempDirectory/bootstrap')
                 buildEnvironmentDirectory = new File('$tempDirectory/env2')
                 minicondaVersion = '3.16.0'
+                condaBuildVersion = '2.1.9'
                 packages = ['python']
                 channels = ["${TestConstants.CHANNEL}"]
             }

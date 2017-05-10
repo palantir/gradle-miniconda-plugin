@@ -106,4 +106,5 @@ class MinicondaBuildTest extends Specification {
         firstResult.task(":setupCondaBuild").outcome == TaskOutcome.SUCCESS
         secondResult.task(":setupCondaBuild").outcome == TaskOutcome.UP_TO_DATE
     }
+
 }

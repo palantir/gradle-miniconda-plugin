@@ -20,7 +20,6 @@ import com.palantir.python.miniconda.MinicondaExtension;
 import com.palantir.python.miniconda.MinicondaUtils;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.nio.file.Path;
 import java.util.Objects;
 import org.gradle.api.Task;
@@ -76,7 +75,7 @@ public class SetupCondaBuild extends AbstractExecTask<SetupCondaBuild> {
         this.getOutputs().upToDateWhen(new Spec<Task>() {
             @Override
             public boolean isSatisfiedBy(Task task) {
-                try (OutputStream os = new ByteArrayOutputStream()) {
+                try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
                     ExecAction execAction = SetupCondaBuild.this.getExecActionFactory().newExecAction();
                     execAction.executable(condaExec);
                     execAction.args("build", "-V"); // will error if build is not installed, otherwise just print stuff
@@ -84,7 +83,8 @@ public class SetupCondaBuild extends AbstractExecTask<SetupCondaBuild> {
                     execAction.setErrorOutput(os);
 
                     String expectedOutput = "conda-build " + miniconda.getCondaBuildVersion();
-                    return execAction.execute().getExitValue() == 0 && os.toString().equals(expectedOutput);
+                    return execAction.execute().getExitValue() == 0
+                            && os.toString("UTF-8").equals(expectedOutput);
                 } catch (IOException e) {
                     return false;
                 }
