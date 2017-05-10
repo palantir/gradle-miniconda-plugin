@@ -18,6 +18,9 @@ package com.palantir.python.miniconda.tasks;
 
 import com.palantir.python.miniconda.MinicondaExtension;
 import com.palantir.python.miniconda.MinicondaUtils;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.Path;
 import java.util.Objects;
 import org.gradle.api.Task;
@@ -64,7 +67,7 @@ public class SetupCondaBuild extends AbstractExecTask<SetupCondaBuild> {
 
         final Path condaExec = miniconda.getBootstrapDirectory().toPath().resolve("bin/conda");
         executable(condaExec);
-        args("install", "--quiet", "--yes", "conda-build");
+        args("install", "--quiet", "--yes", "conda-build==" + miniconda.getCondaBuildVersion());
         args("--override-channels");
         args(MinicondaUtils.convertChannelsToArgs(miniconda.getChannels()));
 
@@ -73,12 +76,18 @@ public class SetupCondaBuild extends AbstractExecTask<SetupCondaBuild> {
         this.getOutputs().upToDateWhen(new Spec<Task>() {
             @Override
             public boolean isSatisfiedBy(Task task) {
-                ExecAction execAction = SetupCondaBuild.this.getExecActionFactory().newExecAction();
-                execAction.executable(condaExec);
-                execAction.args("build", "-V"); // will error if build is not installed, otherwise just print stuff
-                execAction.setIgnoreExitValue(true);
+                try (OutputStream os = new ByteArrayOutputStream()) {
+                    ExecAction execAction = SetupCondaBuild.this.getExecActionFactory().newExecAction();
+                    execAction.executable(condaExec);
+                    execAction.args("build", "-V"); // will error if build is not installed, otherwise just print stuff
+                    execAction.setIgnoreExitValue(true);
+                    execAction.setErrorOutput(os);
 
-                return 0 == execAction.execute().getExitValue();
+                    String expectedOutput = "conda-build " + miniconda.getCondaBuildVersion();
+                    return execAction.execute().getExitValue() == 0 && os.toString().equals(expectedOutput);
+                } catch (IOException e) {
+                    return false;
+                }
             }
         });
     }

@@ -45,6 +45,7 @@ public class MinicondaExtension {
     private final Project project;
 
     private String minicondaVersion;
+    private String condaBuildVersion;
     private int pythonVersion = DEFAULT_PYTHON_VERSION;
     private File bootstrapDirectoryPrefix = DEFAULT_BOOTSTRAP_DIRECTORY_PREFIX;
     private File buildEnvironmentDirectory = null;
@@ -159,6 +160,14 @@ public class MinicondaExtension {
 
     public void setMinicondaVersion(String minicondaVersion) {
         this.minicondaVersion = minicondaVersion;
+    }
+
+    public String getCondaBuildVersion() {
+        return condaBuildVersion;
+    }
+
+    public void setCondaBuildVersion(String condaBuildVersion) {
+        this.condaBuildVersion = condaBuildVersion;
     }
 
     public int getPythonVersion() {
