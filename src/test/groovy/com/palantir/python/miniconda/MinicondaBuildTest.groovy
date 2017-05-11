@@ -99,7 +99,7 @@ class MinicondaBuildTest extends Specification {
         BuildResult firstResult = runner.withArguments("-PcondaBuildVersion=2.1.9").build()
         LOG.info(firstResult.getOutput())
 
-        BuildResult secondResult = runner.withArguments("-PcondaBuildVersion=2.1.8").build()
+        BuildResult secondResult = runner.withArguments("-PcondaBuildVersion=2.1.9").build()
         LOG.info(secondResult.getOutput())
 
         BuildResult thirdResult = runner.withArguments("-PcondaBuildVersion=2.1.8").build()
@@ -107,8 +107,8 @@ class MinicondaBuildTest extends Specification {
 
         then:
         firstResult.task(":setupCondaBuild").outcome == TaskOutcome.SUCCESS
-        secondResult.task(":setupCondaBuild").outcome == TaskOutcome.SUCCESS
-        thirdResult.task(":setupCondaBuild").outcome == TaskOutcome.UP_TO_DATE
+        secondResult.task(":setupCondaBuild").outcome == TaskOutcome.UP_TO_DATE
+        thirdResult.task(":setupCondaBuild").outcome == TaskOutcome.SUCCESS
     }
 
 }
