@@ -93,7 +93,7 @@ public class SetupCondaBuild extends AbstractExecTask<SetupCondaBuild> {
                     String expectedOutput = "conda-build " + miniconda.getCondaBuildVersion();
                     ExecResult result = execAction.execute();
 
-                    return result.getExitValue() != 0
+                    return result.getExitValue() == 0
                             && (miniconda.getCondaBuildVersion() == null
                             || os.toString("UTF-8").trim().equals(expectedOutput));
                 } catch (IOException e) {
