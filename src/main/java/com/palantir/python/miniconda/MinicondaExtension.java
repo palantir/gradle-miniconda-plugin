@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import org.gradle.api.Project;
+import org.gradle.internal.os.OperatingSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,6 +54,7 @@ public class MinicondaExtension {
     private Path metaYaml = null;
     private List<String> packages = new ArrayList<>();
     private List<String> channels = new ArrayList<>(Collections.singletonList(DEFAULT_CHANNEL));
+    private OperatingSystem os = OperatingSystem.current();
 
     public MinicondaExtension(Project project) {
         this.project = project;
@@ -192,5 +194,25 @@ public class MinicondaExtension {
 
     public final void setChannels(List<String> channels) {
         this.channels = channels;
+    }
+
+    public Path getPythonRelativePath() {
+        if (os.isWindows()) {
+            return Paths.get("python");
+        } else {
+            return Paths.get("bin", "python");
+        }
+    }
+
+    public Path getScriptsRelativeDir() {
+        if (os.isWindows()) {
+            return Paths.get("Scripts");
+        } else {
+            return Paths.get("bin");
+        }
+    }
+
+    public OperatingSystem getOs() {
+        return os;
     }
 }

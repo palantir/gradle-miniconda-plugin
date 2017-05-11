@@ -58,13 +58,22 @@ class MinicondaFunctionalTest extends Specification {
                 packages = ['ipython-notebook']
                 channels = ["${TestConstants.CHANNEL}"]
             }
+            
+            task pythonVersion(type: RunVenvPython) {
+                addArgs('--version')
+            }
+            
+            task condaEnvList(type: RunVenvCommand) {
+                setExecutable('conda')
+                addArgs('env', 'list')
+            }
         """
 
         when:
         def runner = GradleRunner.create()
                 .forwardOutput()
                 .withProjectDir(tempDirectory)
-                .withArguments("--info", "--stacktrace", ":setupPython")
+                .withArguments("--info", "--stacktrace", ":pythonVersion", ":condaEnvList")
                 .withPluginClasspath()
 
         BuildResult result = runner.build();
@@ -73,7 +82,11 @@ class MinicondaFunctionalTest extends Specification {
         then:
         result.task(":bootstrapPython").outcome == TaskOutcome.SUCCESS
         result.task(":setupPython").outcome == TaskOutcome.SUCCESS
+        result.task(":pythonVersion").outcome == TaskOutcome.SUCCESS
+        result.task(":condaEnvList").outcome == TaskOutcome.SUCCESS
         secondResult.task(":bootstrapPython").outcome == TaskOutcome.SKIPPED
         secondResult.task(":setupPython").outcome == TaskOutcome.UP_TO_DATE
+        secondResult.task(":pythonVersion").outcome == TaskOutcome.SUCCESS
+        secondResult.task(":condaEnvList").outcome == TaskOutcome.SUCCESS
     }
 }

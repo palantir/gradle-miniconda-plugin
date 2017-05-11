@@ -65,12 +65,13 @@ public class BootstrapPython extends AbstractExecTask<BootstrapPython> {
         getOutputs().dir(miniconda.getBootstrapDirectory());
 
         if (os.isWindows()) {
-            executable(condaInstaller);
+            executable("cmd");
+            args("/c", condaInstaller, "/InstallationType=JustMe", "/AddToPath=0", "/RegisterPython=0",
+                    "/D=" + miniconda.getBootstrapDirectory().getAbsolutePath());
         } else {
             executable("bash");
-            args(condaInstaller);
+            args(condaInstaller, "-b", "-p", miniconda.getBootstrapDirectory());
         }
-        args("-b", "-p", miniconda.getBootstrapDirectory());
         doFirst(new Action<Task>() {
             @Override
             public void execute(Task task) {
