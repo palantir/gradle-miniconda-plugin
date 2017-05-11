@@ -17,7 +17,6 @@
 package com.palantir.python.miniconda.tasks;
 
 import com.palantir.python.miniconda.MinicondaExtension;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -30,7 +29,7 @@ import org.gradle.api.tasks.TaskContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@SuppressFBWarnings("PT_EXTENDS_CONCRETE_TYPE")
+@SuppressWarnings("checkstyle:DesignForExtension") // tasks need non-final getters
 public class ConfigureRootCondaEnv extends DefaultTask {
 
     private static final Logger LOG = LoggerFactory.getLogger(ConfigureRootCondaEnv.class);
@@ -54,12 +53,12 @@ public class ConfigureRootCondaEnv extends DefaultTask {
     }
 
     @OutputFile
-    public final File getOutputFile() {
+    public File getOutputFile() {
         return new File(miniconda.getBootstrapDirectory(), ".condarc");
     }
 
     @TaskAction
-    public final void createCondaRcFile() {
+    public void createCondaRcFile() {
         LOG.info("writing a condarc file to {}", getOutputFile().getAbsolutePath());
 
         String condaRc = "channels: []\ndefault_channels: []\n";
@@ -71,7 +70,7 @@ public class ConfigureRootCondaEnv extends DefaultTask {
         }
     }
 
-    public final void configureAfterEvaluate(final MinicondaExtension minicondaExtension) {
+    public void configureAfterEvaluate(final MinicondaExtension minicondaExtension) {
         this.miniconda = minicondaExtension;
     }
 }

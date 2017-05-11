@@ -18,12 +18,15 @@ package com.palantir.python.miniconda.tasks;
 
 import com.palantir.python.miniconda.MinicondaExtension;
 import com.palantir.python.miniconda.MinicondaUtils;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Objects;
 import org.gradle.api.Task;
 import org.gradle.api.specs.Spec;
 import org.gradle.api.tasks.AbstractExecTask;
 import org.gradle.api.tasks.TaskContainer;
+import org.gradle.process.ExecResult;
 import org.gradle.process.internal.ExecAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +38,7 @@ import org.slf4j.LoggerFactory;
  *
  * Created by jakobjuelich on 3/7/17.
  */
+@SuppressWarnings("checkstyle:DesignForExtension") // tasks need non-final getters
 public class SetupCondaBuild extends AbstractExecTask<SetupCondaBuild> {
 
     private static final Logger LOG = LoggerFactory.getLogger(SetupCondaBuild.class);
@@ -59,26 +63,42 @@ public class SetupCondaBuild extends AbstractExecTask<SetupCondaBuild> {
         super(SetupCondaBuild.class);
     }
 
-    public final void configureAfterEvaluate(final MinicondaExtension miniconda) {
+    public void configureAfterEvaluate(final MinicondaExtension miniconda) {
         Objects.requireNonNull(miniconda, "miniconda must not be null");
 
         final Path condaExec = miniconda.getBootstrapDirectory().toPath().resolve("bin/conda");
         executable(condaExec);
-        args("install", "--quiet", "--yes", "conda-build");
-        args("--override-channels");
+        args("install", "--quiet", "--yes", "--override-channels");
         args(MinicondaUtils.convertChannelsToArgs(miniconda.getChannels()));
+
+        if (miniconda.getCondaBuildVersion() != null) {
+            args("conda-build==" + miniconda.getCondaBuildVersion());
+        } else {
+            args("conda-build");
+        }
 
         LOG.info("{} configured to execute {}", getName(), getCommandLine());
 
-        this.getOutputs().upToDateWhen(new Spec<Task>() {
+        getInputs().property("conda-build-version", miniconda.getCondaBuildVersion());
+        getOutputs().upToDateWhen(new Spec<Task>() {
             @Override
             public boolean isSatisfiedBy(Task task) {
-                ExecAction execAction = SetupCondaBuild.this.getExecActionFactory().newExecAction();
-                execAction.executable(condaExec);
-                execAction.args("build", "-V"); // will error if build is not installed, otherwise just print stuff
-                execAction.setIgnoreExitValue(true);
+                try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
+                    ExecAction execAction = SetupCondaBuild.this.getExecActionFactory().newExecAction();
+                    execAction.executable(condaExec);
+                    execAction.args("build", "-V"); // will error if build is not installed, otherwise just print stuff
+                    execAction.setIgnoreExitValue(true);
+                    execAction.setErrorOutput(os);
 
-                return 0 == execAction.execute().getExitValue();
+                    String expectedOutput = "conda-build " + miniconda.getCondaBuildVersion();
+                    ExecResult result = execAction.execute();
+
+                    return result.getExitValue() == 0
+                            && (miniconda.getCondaBuildVersion() == null
+                            || os.toString("UTF-8").trim().equals(expectedOutput));
+                } catch (IOException e) {
+                    return false;
+                }
             }
         });
     }

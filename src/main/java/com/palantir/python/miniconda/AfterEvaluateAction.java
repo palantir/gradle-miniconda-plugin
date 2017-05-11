@@ -33,7 +33,7 @@ import org.gradle.internal.os.OperatingSystem;
  *
  * @author mnazbro
  */
-public class AfterEvaluateAction implements Action<Project> {
+public final class AfterEvaluateAction implements Action<Project> {
 
     private final OperatingSystem os;
     private final Configuration configuration;
@@ -64,7 +64,7 @@ public class AfterEvaluateAction implements Action<Project> {
     }
 
     @Override
-    public final void execute(Project project) {
+    public void execute(Project project) {
         MinicondaExtension miniconda = project.getExtensions().getByType(MinicondaExtension.class);
         miniconda.validate();
 

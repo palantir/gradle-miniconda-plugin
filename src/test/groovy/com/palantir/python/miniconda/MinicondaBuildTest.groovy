@@ -91,19 +91,28 @@ class MinicondaBuildTest extends Specification {
 
     def 'second setupCondaBuild up to date'() {
         when:
-        def runner = GradleRunner.create()
-                .forwardOutput()
-                .withProjectDir(tempDirectory)
-                .withArguments("--info", "--stacktrace", ":setupCondaBuild")
-                .withPluginClasspath()
-        BuildResult firstResult = runner.build()
+        def runnerForVersion = { condaBuildVersion ->
+            return GradleRunner.create()
+                    .forwardOutput()
+                    .withProjectDir(tempDirectory)
+                    .withPluginClasspath()
+                    .withArguments(
+                    "--info", "--stacktrace", ":setupCondaBuild", "-PcondaBuildVersion=${condaBuildVersion}")
+        }
+
+        BuildResult firstResult = runnerForVersion("2.1.9").build()
         LOG.info(firstResult.getOutput())
 
-        BuildResult secondResult = runner.build()
+        BuildResult secondResult = runnerForVersion("2.1.9").build()
         LOG.info(secondResult.getOutput())
+
+        BuildResult thirdResult = runnerForVersion("2.1.8").build()
+        LOG.info(thirdResult.getOutput())
 
         then:
         firstResult.task(":setupCondaBuild").outcome == TaskOutcome.SUCCESS
         secondResult.task(":setupCondaBuild").outcome == TaskOutcome.UP_TO_DATE
+        thirdResult.task(":setupCondaBuild").outcome == TaskOutcome.SUCCESS
     }
+
 }

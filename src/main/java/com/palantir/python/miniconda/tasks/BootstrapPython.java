@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author mnazbro
  */
+@SuppressWarnings("checkstyle:DesignForExtension") // tasks need non-final getters
 public class BootstrapPython extends AbstractExecTask<BootstrapPython> {
     private static final Logger LOG = LoggerFactory.getLogger(BootstrapPython.class);
 
@@ -53,7 +54,7 @@ public class BootstrapPython extends AbstractExecTask<BootstrapPython> {
         super(BootstrapPython.class);
     }
 
-    public final void configureAfterEvaluate(
+    public void configureAfterEvaluate(
             final MinicondaExtension miniconda, File condaInstaller, OperatingSystem os) {
         Objects.requireNonNull(miniconda, "miniconda must not be null");
         Objects.requireNonNull(condaInstaller, "condaInstaller must not be null");
