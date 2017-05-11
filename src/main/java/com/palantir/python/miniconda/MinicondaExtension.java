@@ -57,7 +57,7 @@ public class MinicondaExtension {
         this.project = project;
     }
 
-    public void validate() {
+    public final void validate() {
         Objects.requireNonNull(minicondaVersion, "miniconda.minicondaVersion must be set.");
         Objects.requireNonNull(bootstrapDirectoryPrefix, "miniconda.bootstrapDirectoryPrefix must not be null.");
         Objects.requireNonNull(packages, "miniconda.packages must not be null.");
@@ -76,112 +76,112 @@ public class MinicondaExtension {
         }
     }
 
-    public File getBootstrapDirectory() {
+    public final File getBootstrapDirectory() {
         return bootstrapDirectoryPrefix.toPath()
                 .resolve("python-" + pythonVersion)
                 .resolve("miniconda-" + minicondaVersion)
                 .toFile();
     }
 
-    public File getBootstrapDirectoryPrefix() {
+    public final File getBootstrapDirectoryPrefix() {
         return bootstrapDirectoryPrefix;
     }
 
-    public void setBootstrapDirectoryPrefix(String bootstrapDirectoryPrefix) {
+    public final void setBootstrapDirectoryPrefix(String bootstrapDirectoryPrefix) {
         setBootstrapDirectoryPrefix(new File(bootstrapDirectoryPrefix));
     }
 
-    public void setBootstrapDirectoryPrefix(Path bootstrapDirectoryPrefix) {
+    public final void setBootstrapDirectoryPrefix(Path bootstrapDirectoryPrefix) {
         setBootstrapDirectoryPrefix(bootstrapDirectoryPrefix.toFile());
     }
 
-    public void setBootstrapDirectoryPrefix(File bootstrapDirectoryPrefix) {
+    public final void setBootstrapDirectoryPrefix(File bootstrapDirectoryPrefix) {
         this.bootstrapDirectoryPrefix = bootstrapDirectoryPrefix;
     }
 
-    public File getBuildEnvironmentDirectory() {
+    public final File getBuildEnvironmentDirectory() {
         if (buildEnvironmentDirectory == null) {
             return project.file(DEFAULT_BUILD_ENVIRONMENT_DIRECTORY);
         }
         return buildEnvironmentDirectory;
     }
 
-    public File getBuildOutputDirectory() {
+    public final File getBuildOutputDirectory() {
         return buildOutputDirectory;
     }
 
-    public void setMetaYaml(Path metaYaml) {
+    public final void setMetaYaml(Path metaYaml) {
         this.metaYaml = metaYaml;
     }
 
-    public void setMetaYaml(File metaYaml) {
+    public final void setMetaYaml(File metaYaml) {
         setMetaYaml(metaYaml.toPath());
     }
 
-    public void setMetaYaml(String metaYaml) {
+    public final void setMetaYaml(String metaYaml) {
         setMetaYaml(Paths.get(metaYaml));
     }
 
-    public Path getMetaYaml() {
+    public final Path getMetaYaml() {
         if (metaYaml == null) {
             return project.file(DEFAULT_META_YAML_DIR).toPath();
         }
         return metaYaml;
     }
 
-    public void setBuildEnvironmentDirectory(String buildEnvironmentDirectory) {
+    public final void setBuildEnvironmentDirectory(String buildEnvironmentDirectory) {
         setBuildEnvironmentDirectory(new File(buildEnvironmentDirectory));
     }
 
-    public void setBuildEnvironmentDirectory(Path buildEnvironmentDirectory) {
+    public final void setBuildEnvironmentDirectory(Path buildEnvironmentDirectory) {
         setBuildEnvironmentDirectory(buildEnvironmentDirectory.toFile());
     }
 
-    public void setBuildEnvironmentDirectory(File buildEnvironmentDirectory) {
+    public final void setBuildEnvironmentDirectory(File buildEnvironmentDirectory) {
         this.buildEnvironmentDirectory = buildEnvironmentDirectory;
     }
 
-    public void setBuildOutputDirectory(String buildOutputDirectory) {
+    public final void setBuildOutputDirectory(String buildOutputDirectory) {
         setBuildOutputDirectory(new File(buildOutputDirectory));
     }
 
-    public void setBuildOutputDirectory(Path buildOutputDirectory) {
+    public final void setBuildOutputDirectory(Path buildOutputDirectory) {
         setBuildOutputDirectory(buildOutputDirectory.toFile());
     }
 
-    public void setBuildOutputDirectory(File buildOutputDirectory) {
+    public final void setBuildOutputDirectory(File buildOutputDirectory) {
         this.buildOutputDirectory = buildOutputDirectory;
     }
 
-    public String getMinicondaVersion() {
+    public final String getMinicondaVersion() {
         return minicondaVersion;
     }
 
-    public void setMinicondaVersion(String minicondaVersion) {
+    public final void setMinicondaVersion(String minicondaVersion) {
         this.minicondaVersion = minicondaVersion;
     }
 
-    public int getPythonVersion() {
+    public final int getPythonVersion() {
         return pythonVersion;
     }
 
-    public void setPythonVersion(int pythonVersion) {
+    public final void setPythonVersion(int pythonVersion) {
         this.pythonVersion = pythonVersion;
     }
 
-    public List<String> getPackages() {
+    public final List<String> getPackages() {
         return packages;
     }
 
-    public void setPackages(List<String> packages) {
+    public final void setPackages(List<String> packages) {
         this.packages = packages;
     }
 
-    public List<String> getChannels() {
+    public final List<String> getChannels() {
         return channels;
     }
 
-    public void setChannels(List<String> channels) {
+    public final final void setChannels(List<String> channels) {
         this.channels = channels;
     }
 }
