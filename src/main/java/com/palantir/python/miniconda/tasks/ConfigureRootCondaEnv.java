@@ -29,8 +29,8 @@ import org.gradle.api.tasks.TaskContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@SuppressWarnings("PT_EXTENDS_CONCRETE_TYPE")
-public final class ConfigureRootCondaEnv extends DefaultTask {
+@SuppressWarnings("checkstyle:DesignForExtension") // tasks need non-final getters
+public class ConfigureRootCondaEnv extends DefaultTask {
 
     private static final Logger LOG = LoggerFactory.getLogger(ConfigureRootCondaEnv.class);
 

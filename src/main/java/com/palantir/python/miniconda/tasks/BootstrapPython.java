@@ -33,7 +33,8 @@ import org.slf4j.LoggerFactory;
  *
  * @author mnazbro
  */
-public final class BootstrapPython extends AbstractExecTask<BootstrapPython> {
+@SuppressWarnings("checkstyle:DesignForExtension") // tasks need non-final getters
+public class BootstrapPython extends AbstractExecTask<BootstrapPython> {
     private static final Logger LOG = LoggerFactory.getLogger(BootstrapPython.class);
 
     private static final String DEFAULT_GROUP = "build";

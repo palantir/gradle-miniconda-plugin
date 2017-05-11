@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author jakobjuelich
  */
+@SuppressWarnings("checkstyle:DesignForExtension") // tasks need non-final getters
 public class CondaBuildCheck extends AbstractExecTask<CondaBuildCheck> {
     private static final Logger LOG = LoggerFactory.getLogger(CondaBuildCheck.class);
 
@@ -51,7 +52,7 @@ public class CondaBuildCheck extends AbstractExecTask<CondaBuildCheck> {
         super(CondaBuildCheck.class);
     }
 
-    public final void configureAfterEvaluate(final MinicondaExtension miniconda) {
+    public void configureAfterEvaluate(final MinicondaExtension miniconda) {
         Objects.requireNonNull(miniconda, "miniconda must not be null");
 
         executable(miniconda.getBootstrapDirectory().toPath().resolve("bin/conda"));

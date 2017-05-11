@@ -29,7 +29,8 @@ import org.slf4j.LoggerFactory;
  *
  * @author jakobjuelich
  */
-public final class CondaBuild extends AbstractExecTask<CondaBuild> {
+@SuppressWarnings("checkstyle:DesignForExtension") // tasks need non-final getters
+public class CondaBuild extends AbstractExecTask<CondaBuild> {
     private static final Logger LOG = LoggerFactory.getLogger(CondaBuild.class);
 
     private static final String DEFAULT_GROUP = "build";

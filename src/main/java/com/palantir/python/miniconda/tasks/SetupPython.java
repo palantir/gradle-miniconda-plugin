@@ -31,7 +31,8 @@ import org.slf4j.LoggerFactory;
  *
  * @author mnazbro
  */
-public final class SetupPython extends AbstractExecTask<SetupPython> {
+@SuppressWarnings("checkstyle:DesignForExtension") // tasks need non-final getters
+public class SetupPython extends AbstractExecTask<SetupPython> {
     private static final Logger LOG = LoggerFactory.getLogger(SetupPython.class);
 
     private static final String DEFAULT_GROUP = "build";
