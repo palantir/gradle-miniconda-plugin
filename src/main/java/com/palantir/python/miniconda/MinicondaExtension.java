@@ -181,7 +181,7 @@ public class MinicondaExtension {
         return channels;
     }
 
-    public final final void setChannels(List<String> channels) {
+    public final void setChannels(List<String> channels) {
         this.channels = channels;
     }
 }
