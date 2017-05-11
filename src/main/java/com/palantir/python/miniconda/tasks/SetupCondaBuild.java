@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
  *
  * Created by jakobjuelich on 3/7/17.
  */
-public class SetupCondaBuild extends AbstractExecTask<SetupCondaBuild> {
+public final class SetupCondaBuild extends AbstractExecTask<SetupCondaBuild> {
 
     private static final Logger LOG = LoggerFactory.getLogger(SetupCondaBuild.class);
 
@@ -62,14 +62,19 @@ public class SetupCondaBuild extends AbstractExecTask<SetupCondaBuild> {
         super(SetupCondaBuild.class);
     }
 
-    public final void configureAfterEvaluate(final MinicondaExtension miniconda) {
+    public void configureAfterEvaluate(final MinicondaExtension miniconda) {
         Objects.requireNonNull(miniconda, "miniconda must not be null");
 
         final Path condaExec = miniconda.getBootstrapDirectory().toPath().resolve("bin/conda");
         executable(condaExec);
-        args("install", "--quiet", "--yes", "conda-build==" + miniconda.getCondaBuildVersion());
-        args("--override-channels");
+        args("install", "--quiet", "--yes", "--override-channels");
         args(MinicondaUtils.convertChannelsToArgs(miniconda.getChannels()));
+
+        if (miniconda.getCondaBuildVersion() != null) {
+            args("conda-build==" + miniconda.getCondaBuildVersion());
+        } else {
+            args("conda-build");
+        }
 
         LOG.info("{} configured to execute {}", getName(), getCommandLine());
 
@@ -87,8 +92,9 @@ public class SetupCondaBuild extends AbstractExecTask<SetupCondaBuild> {
                     String expectedOutput = "conda-build " + miniconda.getCondaBuildVersion();
                     ExecResult result = execAction.execute();
 
-                    return result.getExitValue() == 0
-                            && os.toString("UTF-8").trim().equals(expectedOutput);
+                    return result.getExitValue() != 0
+                            && (miniconda.getCondaBuildVersion() == null
+                            || os.toString("UTF-8").trim().equals(expectedOutput));
                 } catch (IOException e) {
                     return false;
                 }

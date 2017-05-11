@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author pbiswal
  */
-public class MinicondaPlugin implements Plugin<Project> {
+public final class MinicondaPlugin implements Plugin<Project> {
     private static final Logger LOG = LoggerFactory.getLogger(MinicondaPlugin.class);
 
     private static final OperatingSystem OS = OperatingSystem.current();
@@ -49,7 +49,7 @@ public class MinicondaPlugin implements Plugin<Project> {
     private static final String IVY_REPO_URL = "https://repo.continuum.io";
 
     @Override
-    public final void apply(Project project) {
+    public void apply(Project project) {
         createIvyRepository(project);
 
         TaskContainer tasks = project.getTasks();

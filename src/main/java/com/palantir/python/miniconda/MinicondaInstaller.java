@@ -30,7 +30,7 @@ import org.gradle.util.VersionNumber;
  *
  * @author mnazbro
  */
-public class MinicondaInstaller {
+public final class MinicondaInstaller {
     private static final int POTENTIAL_LEGACY_PYTHON_VERSION = 2;
     private static final VersionNumber MINIMUM_NON_LEGACY_VERSION = VersionNumber.parse("3.16.0");
     private static final String CONFIGURATION_NAME = "minicondaInstaller";
@@ -43,7 +43,7 @@ public class MinicondaInstaller {
         this.miniconda = miniconda;
     }
 
-    public final void addToDependencyHandler(DependencyHandler handler) {
+    public void addToDependencyHandler(DependencyHandler handler) {
         final Map<String, String> map = new HashMap<>();
         map.put("group", "miniconda");
         map.put("name", getName());

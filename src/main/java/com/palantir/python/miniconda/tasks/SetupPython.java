@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author mnazbro
  */
-public class SetupPython extends AbstractExecTask<SetupPython> {
+public final class SetupPython extends AbstractExecTask<SetupPython> {
     private static final Logger LOG = LoggerFactory.getLogger(SetupPython.class);
 
     private static final String DEFAULT_GROUP = "build";
@@ -54,7 +54,7 @@ public class SetupPython extends AbstractExecTask<SetupPython> {
         super(SetupPython.class);
     }
 
-    public final void configureAfterEvaluate(final MinicondaExtension miniconda) {
+    public void configureAfterEvaluate(final MinicondaExtension miniconda) {
         Objects.requireNonNull(miniconda, "miniconda must not be null");
 
         getInputs().property("packages", miniconda.getPackages());

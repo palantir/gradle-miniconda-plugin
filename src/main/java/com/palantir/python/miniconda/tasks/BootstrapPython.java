@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author mnazbro
  */
-public class BootstrapPython extends AbstractExecTask<BootstrapPython> {
+public final class BootstrapPython extends AbstractExecTask<BootstrapPython> {
     private static final Logger LOG = LoggerFactory.getLogger(BootstrapPython.class);
 
     private static final String DEFAULT_GROUP = "build";
@@ -53,7 +53,7 @@ public class BootstrapPython extends AbstractExecTask<BootstrapPython> {
         super(BootstrapPython.class);
     }
 
-    public final void configureAfterEvaluate(
+    public void configureAfterEvaluate(
             final MinicondaExtension miniconda, File condaInstaller, OperatingSystem os) {
         Objects.requireNonNull(miniconda, "miniconda must not be null");
         Objects.requireNonNull(condaInstaller, "condaInstaller must not be null");

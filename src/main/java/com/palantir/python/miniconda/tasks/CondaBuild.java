@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author jakobjuelich
  */
-public class CondaBuild extends AbstractExecTask<CondaBuild> {
+public final class CondaBuild extends AbstractExecTask<CondaBuild> {
     private static final Logger LOG = LoggerFactory.getLogger(CondaBuild.class);
 
     private static final String DEFAULT_GROUP = "build";
@@ -52,7 +52,7 @@ public class CondaBuild extends AbstractExecTask<CondaBuild> {
         super(CondaBuild.class);
     }
 
-    public final void configureAfterEvaluate(final MinicondaExtension miniconda) {
+    public void configureAfterEvaluate(final MinicondaExtension miniconda) {
         Objects.requireNonNull(miniconda, "miniconda must not be null");
 
         executable(miniconda.getBootstrapDirectory().toPath().resolve("bin/conda"));
