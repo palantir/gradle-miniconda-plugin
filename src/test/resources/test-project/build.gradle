@@ -4,7 +4,7 @@ plugins {
 
 miniconda {
     minicondaVersion = '4.3.11'
-    condaBuildVersion = '2.1.9'
+    condaBuildVersion = findProperty('condaBuildVersion')
     packages = ['python']
     buildOutputDirectory = project.getBuildDir().toPath().resolve("output")
 }
