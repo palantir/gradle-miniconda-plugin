@@ -26,6 +26,7 @@ import org.gradle.api.Task;
 import org.gradle.api.specs.Spec;
 import org.gradle.api.tasks.AbstractExecTask;
 import org.gradle.api.tasks.TaskContainer;
+import org.gradle.process.ExecResult;
 import org.gradle.process.internal.ExecAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,7 +73,8 @@ public class SetupCondaBuild extends AbstractExecTask<SetupCondaBuild> {
 
         LOG.info("{} configured to execute {}", getName(), getCommandLine());
 
-        this.getOutputs().upToDateWhen(new Spec<Task>() {
+        getInputs().property("conda-build-version", miniconda.getCondaBuildVersion());
+        getOutputs().upToDateWhen(new Spec<Task>() {
             @Override
             public boolean isSatisfiedBy(Task task) {
                 try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
@@ -83,8 +85,10 @@ public class SetupCondaBuild extends AbstractExecTask<SetupCondaBuild> {
                     execAction.setErrorOutput(os);
 
                     String expectedOutput = "conda-build " + miniconda.getCondaBuildVersion();
-                    return execAction.execute().getExitValue() == 0
-                            && os.toString("UTF-8").equals(expectedOutput);
+                    ExecResult result = execAction.execute();
+
+                    return result.getExitValue() == 0
+                            && os.toString("UTF-8").trim().equals(expectedOutput);
                 } catch (IOException e) {
                     return false;
                 }
