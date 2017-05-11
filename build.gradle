@@ -12,11 +12,11 @@
 
 buildscript {
     repositories {
-        jcenter()
+        maven { url  "http://palantir.bintray.com/releases" }
     }
 
     dependencies {
-        classpath 'com.palantir:gradle-baseline-java:0.9.1'
+        classpath 'com.palantir.baseline:gradle-baseline-java:0.14.0'
     }
 }
 
@@ -31,9 +31,10 @@ plugins {
 }
 
 apply plugin: 'com.palantir.baseline-config'
+
 apply plugin: 'com.palantir.baseline-checkstyle'
 apply plugin: 'com.palantir.baseline-eclipse'
-apply plugin: 'com.palantir.baseline-findbugs'
+apply plugin: 'com.palantir.baseline-error-prone'
 apply plugin: 'com.palantir.baseline-idea'
 
 allprojects {
@@ -46,9 +47,12 @@ targetCompatibility = '1.7'
 
 repositories {
     jcenter()
+    maven { url  "http://palantir.bintray.com/releases" }
 }
 
 dependencies {
+    baseline "com.palantir.baseline:gradle-baseline-java-config:0.14.0@zip"
+
     compile gradleApi()
     compile 'com.google.code.findbugs:annotations:3.0.1'
 

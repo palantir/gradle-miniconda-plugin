@@ -49,7 +49,7 @@ public class MinicondaPlugin implements Plugin<Project> {
     private static final String IVY_REPO_URL = "https://repo.continuum.io";
 
     @Override
-    public void apply(Project project) {
+    public final void apply(Project project) {
         createIvyRepository(project);
 
         TaskContainer tasks = project.getTasks();

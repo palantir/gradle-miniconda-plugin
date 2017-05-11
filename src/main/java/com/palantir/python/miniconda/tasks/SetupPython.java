@@ -54,7 +54,7 @@ public class SetupPython extends AbstractExecTask<SetupPython> {
         super(SetupPython.class);
     }
 
-    public void configureAfterEvaluate(final MinicondaExtension miniconda) {
+    public final void configureAfterEvaluate(final MinicondaExtension miniconda) {
         Objects.requireNonNull(miniconda, "miniconda must not be null");
 
         getInputs().property("packages", miniconda.getPackages());

@@ -59,7 +59,7 @@ public class SetupCondaBuild extends AbstractExecTask<SetupCondaBuild> {
         super(SetupCondaBuild.class);
     }
 
-    public void configureAfterEvaluate(final MinicondaExtension miniconda) {
+    public final void configureAfterEvaluate(final MinicondaExtension miniconda) {
         Objects.requireNonNull(miniconda, "miniconda must not be null");
 
         final Path condaExec = miniconda.getBootstrapDirectory().toPath().resolve("bin/conda");

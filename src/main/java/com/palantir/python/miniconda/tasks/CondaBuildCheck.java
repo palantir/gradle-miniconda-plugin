@@ -51,7 +51,7 @@ public class CondaBuildCheck extends AbstractExecTask<CondaBuildCheck> {
         super(CondaBuildCheck.class);
     }
 
-    public void configureAfterEvaluate(final MinicondaExtension miniconda) {
+    public final void configureAfterEvaluate(final MinicondaExtension miniconda) {
         Objects.requireNonNull(miniconda, "miniconda must not be null");
 
         executable(miniconda.getBootstrapDirectory().toPath().resolve("bin/conda"));

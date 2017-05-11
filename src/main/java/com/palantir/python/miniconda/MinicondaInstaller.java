@@ -43,7 +43,7 @@ public class MinicondaInstaller {
         this.miniconda = miniconda;
     }
 
-    public void addToDependencyHandler(DependencyHandler handler) {
+    public final void addToDependencyHandler(DependencyHandler handler) {
         final Map<String, String> map = new HashMap<>();
         map.put("group", "miniconda");
         map.put("name", getName());

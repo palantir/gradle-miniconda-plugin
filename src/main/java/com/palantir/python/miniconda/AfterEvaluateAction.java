@@ -64,7 +64,7 @@ public class AfterEvaluateAction implements Action<Project> {
     }
 
     @Override
-    public void execute(Project project) {
+    public final void execute(Project project) {
         MinicondaExtension miniconda = project.getExtensions().getByType(MinicondaExtension.class);
         miniconda.validate();
 

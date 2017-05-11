@@ -54,12 +54,12 @@ public class ConfigureRootCondaEnv extends DefaultTask {
     }
 
     @OutputFile
-    public File getOutputFile() {
+    public final File getOutputFile() {
         return new File(miniconda.getBootstrapDirectory(), ".condarc");
     }
 
     @TaskAction
-    public void createCondaRcFile() {
+    public final void createCondaRcFile() {
         LOG.info("writing a condarc file to {}", getOutputFile().getAbsolutePath());
 
         String condaRc = "channels: []\ndefault_channels: []\n";
@@ -71,7 +71,7 @@ public class ConfigureRootCondaEnv extends DefaultTask {
         }
     }
 
-    public void configureAfterEvaluate(final MinicondaExtension minicondaExtension) {
+    public final void configureAfterEvaluate(final MinicondaExtension minicondaExtension) {
         this.miniconda = minicondaExtension;
     }
 }
