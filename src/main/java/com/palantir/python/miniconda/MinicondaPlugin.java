@@ -20,6 +20,7 @@ import com.palantir.python.miniconda.tasks.BootstrapPython;
 import com.palantir.python.miniconda.tasks.CleanTaskUtils;
 import com.palantir.python.miniconda.tasks.CondaBuild;
 import com.palantir.python.miniconda.tasks.CondaBuildCheck;
+import com.palantir.python.miniconda.tasks.ConfigureRootCondaEnv;
 import com.palantir.python.miniconda.tasks.SetupCondaBuild;
 import com.palantir.python.miniconda.tasks.SetupPython;
 import org.gradle.api.Action;
@@ -48,13 +49,14 @@ public class MinicondaPlugin implements Plugin<Project> {
     private static final String IVY_REPO_URL = "https://repo.continuum.io";
 
     @Override
-    public void apply(Project project) {
+    public final void apply(Project project) {
         createIvyRepository(project);
 
         TaskContainer tasks = project.getTasks();
         BootstrapPython bootstrapPython = BootstrapPython.createTask(tasks);
-        SetupPython setupPython = SetupPython.createTask(tasks, bootstrapPython);
-        SetupCondaBuild setupCondaBuild = SetupCondaBuild.createTask(tasks, bootstrapPython);
+        ConfigureRootCondaEnv configureCondaRootEnv = ConfigureRootCondaEnv.createTask(tasks, bootstrapPython);
+        SetupPython setupPython = SetupPython.createTask(tasks, configureCondaRootEnv);
+        SetupCondaBuild setupCondaBuild = SetupCondaBuild.createTask(tasks, configureCondaRootEnv);
         CondaBuildCheck condaBuildCheck = CondaBuildCheck.createTask(tasks, setupCondaBuild);
         CondaBuild condaBuild = CondaBuild.createTask(tasks, condaBuildCheck);
 
@@ -67,8 +69,10 @@ public class MinicondaPlugin implements Plugin<Project> {
         LOG.debug("MinicondaPlugin tasks created.");
         Configuration configuration = project.getConfigurations().create(CONFIGURATION_NAME);
         project.afterEvaluate(
-                new AfterEvaluateAction(
-                        OS, configuration, bootstrapPython, setupPython, setupCondaBuild, condaBuildCheck, condaBuild));
+                new AfterEvaluateAction(OS, configuration,
+                        bootstrapPython, configureCondaRootEnv,
+                        setupPython, setupCondaBuild,
+                        condaBuildCheck, condaBuild));
     }
 
     private static void createIvyRepository(Project project) {

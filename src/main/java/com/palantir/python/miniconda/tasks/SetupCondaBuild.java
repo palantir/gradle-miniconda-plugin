@@ -45,14 +45,14 @@ public class SetupCondaBuild extends AbstractExecTask<SetupCondaBuild> {
     private static final String DEFAULT_GROUP = "build";
     private static final String DEFAULT_DESCRIPTION = "Installs conda-build.";
 
-    public static SetupCondaBuild createTask(TaskContainer tasks, BootstrapPython bootstrapPython) {
+    public static SetupCondaBuild createTask(TaskContainer tasks, ConfigureRootCondaEnv configureRootCondaEnv) {
         Objects.requireNonNull(tasks, "tasks must not be null");
-        Objects.requireNonNull(bootstrapPython, "bootstrapPython must not be null");
+        Objects.requireNonNull(configureRootCondaEnv, "bootstrapPython must not be null");
 
         SetupCondaBuild task = tasks.create("setupCondaBuild", SetupCondaBuild.class);
         task.setGroup(DEFAULT_GROUP);
         task.setDescription(DEFAULT_DESCRIPTION);
-        task.dependsOn(bootstrapPython);
+        task.dependsOn(configureRootCondaEnv);
 
         CleanTaskUtils.createCleanupTask(tasks, task);
         return task;
@@ -62,7 +62,7 @@ public class SetupCondaBuild extends AbstractExecTask<SetupCondaBuild> {
         super(SetupCondaBuild.class);
     }
 
-    public void configureAfterEvaluate(final MinicondaExtension miniconda) {
+    public final void configureAfterEvaluate(final MinicondaExtension miniconda) {
         Objects.requireNonNull(miniconda, "miniconda must not be null");
 
         final Path condaExec = miniconda.getBootstrapDirectory().toPath().resolve("bin/conda");

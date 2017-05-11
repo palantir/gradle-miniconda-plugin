@@ -53,7 +53,8 @@ public class BootstrapPython extends AbstractExecTask<BootstrapPython> {
         super(BootstrapPython.class);
     }
 
-    public void configureAfterEvaluate(final MinicondaExtension miniconda, File condaInstaller, OperatingSystem os) {
+    public final void configureAfterEvaluate(
+            final MinicondaExtension miniconda, File condaInstaller, OperatingSystem os) {
         Objects.requireNonNull(miniconda, "miniconda must not be null");
         Objects.requireNonNull(condaInstaller, "condaInstaller must not be null");
         Objects.requireNonNull(os, "os must not be null");

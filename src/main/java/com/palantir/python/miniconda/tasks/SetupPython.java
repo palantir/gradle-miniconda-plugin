@@ -37,14 +37,14 @@ public class SetupPython extends AbstractExecTask<SetupPython> {
     private static final String DEFAULT_GROUP = "build";
     private static final String DEFAULT_DESCRIPTION = "Installs a conda env with specified packages.";
 
-    public static SetupPython createTask(TaskContainer tasks, BootstrapPython bootstrapPython) {
+    public static SetupPython createTask(TaskContainer tasks, ConfigureRootCondaEnv configureRootCondaEnv) {
         Objects.requireNonNull(tasks, "tasks must not be null");
-        Objects.requireNonNull(bootstrapPython, "bootstrapPython must not be null");
+        Objects.requireNonNull(configureRootCondaEnv, "bootstrapPython must not be null");
 
         SetupPython task = tasks.create("setupPython", SetupPython.class);
         task.setGroup(DEFAULT_GROUP);
         task.setDescription(DEFAULT_DESCRIPTION);
-        task.dependsOn(bootstrapPython);
+        task.dependsOn(configureRootCondaEnv);
 
         CleanTaskUtils.createCleanupTask(tasks, task);
         return task;
@@ -54,7 +54,7 @@ public class SetupPython extends AbstractExecTask<SetupPython> {
         super(SetupPython.class);
     }
 
-    public void configureAfterEvaluate(final MinicondaExtension miniconda) {
+    public final void configureAfterEvaluate(final MinicondaExtension miniconda) {
         Objects.requireNonNull(miniconda, "miniconda must not be null");
 
         getInputs().property("packages", miniconda.getPackages());

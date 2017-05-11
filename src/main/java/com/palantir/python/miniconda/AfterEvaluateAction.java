@@ -19,6 +19,7 @@ package com.palantir.python.miniconda;
 import com.palantir.python.miniconda.tasks.BootstrapPython;
 import com.palantir.python.miniconda.tasks.CondaBuild;
 import com.palantir.python.miniconda.tasks.CondaBuildCheck;
+import com.palantir.python.miniconda.tasks.ConfigureRootCondaEnv;
 import com.palantir.python.miniconda.tasks.SetupCondaBuild;
 import com.palantir.python.miniconda.tasks.SetupPython;
 import org.gradle.api.Action;
@@ -37,6 +38,7 @@ public class AfterEvaluateAction implements Action<Project> {
     private final OperatingSystem os;
     private final Configuration configuration;
     private final BootstrapPython bootstrapPython;
+    private final ConfigureRootCondaEnv configureRootCondaEnv;
     private final SetupPython setupPython;
     private final SetupCondaBuild setupCondaBuild;
     private final CondaBuildCheck condaBuildCheck;
@@ -46,6 +48,7 @@ public class AfterEvaluateAction implements Action<Project> {
             OperatingSystem os,
             Configuration configuration,
             BootstrapPython bootstrapPython,
+            ConfigureRootCondaEnv configureRootCondaEnv,
             SetupPython setupPython,
             SetupCondaBuild setupCondaBuild,
             CondaBuildCheck condaBuildCheck,
@@ -53,6 +56,7 @@ public class AfterEvaluateAction implements Action<Project> {
         this.os = os;
         this.configuration = configuration;
         this.bootstrapPython = bootstrapPython;
+        this.configureRootCondaEnv = configureRootCondaEnv;
         this.setupPython = setupPython;
         this.setupCondaBuild = setupCondaBuild;
         this.condaBuildCheck = condaBuildCheck;
@@ -60,12 +64,13 @@ public class AfterEvaluateAction implements Action<Project> {
     }
 
     @Override
-    public void execute(Project project) {
+    public final void execute(Project project) {
         MinicondaExtension miniconda = project.getExtensions().getByType(MinicondaExtension.class);
         miniconda.validate();
 
         addMinicondaInstallerDependency(project, miniconda);
         bootstrapPython.configureAfterEvaluate(miniconda, configuration.getSingleFile(), os);
+        configureRootCondaEnv.configureAfterEvaluate(miniconda);
         setupPython.configureAfterEvaluate(miniconda);
         setupCondaBuild.configureAfterEvaluate(miniconda);
         condaBuildCheck.configureAfterEvaluate(miniconda);
