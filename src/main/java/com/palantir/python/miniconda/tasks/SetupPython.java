@@ -63,7 +63,7 @@ public class SetupPython extends AbstractExecTask<SetupPython> {
 
         executable(miniconda.getBootstrapDirectory().toPath().resolve("bin/conda"));
         args("create", "--yes", "--quiet", "-p", miniconda.getBuildEnvironmentDirectory());
-        args("--override-channels");
+        args("--override-channels", "--no-update-deps");
         args(MinicondaUtils.convertChannelsToArgs(miniconda.getChannels()));
         args(miniconda.getPackages());
 

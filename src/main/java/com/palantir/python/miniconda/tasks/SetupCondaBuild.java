@@ -68,7 +68,7 @@ public class SetupCondaBuild extends AbstractExecTask<SetupCondaBuild> {
 
         final Path condaExec = miniconda.getBootstrapDirectory().toPath().resolve("bin/conda");
         executable(condaExec);
-        args("install", "--quiet", "--yes", "--override-channels");
+        args("install", "--quiet", "--yes", "--override-channels", "--no-update-deps");
         args(MinicondaUtils.convertChannelsToArgs(miniconda.getChannels()));
 
         if (miniconda.getCondaBuildVersion() != null) {
