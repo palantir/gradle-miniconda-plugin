@@ -56,7 +56,7 @@ dependencies {
     compile gradleApi()
     compile 'com.google.code.findbugs:annotations:3.0.1'
 
-    testCompile('com.netflix.nebula:nebula-test:4.2.2') {
+    testCompile('com.netflix.nebula:nebula-test:7.1.6') {
         exclude group: 'org.codehaus.groovy'
     }
 }

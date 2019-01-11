@@ -54,7 +54,7 @@ class MinicondaFunctionalTest extends Specification {
             miniconda {
                 bootstrapDirectoryPrefix = new File('$minicondaDir/bootstrap')
                 buildEnvironmentDirectory = new File('$minicondaDir/env')
-                minicondaVersion = '3.18.3'
+                minicondaVersion = '4.5.12'
                 packages = ['ipython-notebook']
                 channels = ["${TestConstants.CHANNEL}"]
             }
