@@ -25,7 +25,7 @@ plugins {
     id 'groovy'
     id 'java-gradle-plugin'
     id 'com.gradle.plugin-publish' version '0.9.6'
-    id 'com.palantir.configuration-resolver' version '0.1.0'
+    id 'com.palantir.configuration-resolver' version '0.2.0'
     id 'com.palantir.git-version' version '0.5.2'
     id 'maven-publish'
 }
