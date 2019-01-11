@@ -46,7 +46,7 @@ class MinicondaIntegrationSpec extends IntegrationSpec {
             miniconda {
                 bootstrapDirectoryPrefix = new File('$tempDirectory/bootstrap')
                 buildEnvironmentDirectory = new File('$tempDirectory/env')
-                minicondaVersion = '3.18.3'
+                minicondaVersion = '4.5.12'
                 packages = ['ipython-notebook']
                 channels = ["${TestConstants.CHANNEL}"]
             }
@@ -66,7 +66,7 @@ class MinicondaIntegrationSpec extends IntegrationSpec {
             miniconda {
                 bootstrapDirectoryPrefix = new File('$tempDirectory/bootstrap')
                 buildEnvironmentDirectory = new File('$tempDirectory/env')
-                minicondaVersion = '3.10.1'
+                minicondaVersion = '4.3.11'
                 packages = ['ipython-notebook']
                 channels = ["${TestConstants.CHANNEL}"]
             }
@@ -86,7 +86,7 @@ class MinicondaIntegrationSpec extends IntegrationSpec {
             miniconda {
                 bootstrapDirectoryPrefix = new File('$tempDirectory/bootstrap')
                 buildEnvironmentDirectory = new File('$tempDirectory/env')
-                minicondaVersion = '3.10.1'
+                minicondaVersion = '4.5.12'
                 pythonVersion = 3
                 packages = ['python']
                 channels = ["${TestConstants.CHANNEL}"]
@@ -97,7 +97,7 @@ class MinicondaIntegrationSpec extends IntegrationSpec {
         ExecutionResult result = runTasksSuccessfully('setupPython')
 
         then:
-        new File("$tempDirectory/bootstrap/python-3/miniconda-3.10.1").exists()
+        new File("$tempDirectory/bootstrap/python-3/miniconda-4.5.12").exists()
         result.wasExecuted(':bootstrapPython')
     }
 
@@ -108,7 +108,7 @@ class MinicondaIntegrationSpec extends IntegrationSpec {
             miniconda {
                 bootstrapDirectoryPrefix = new File('$tempDirectory/bootstrap')
                 buildEnvironmentDirectory = new File('$tempDirectory/env1')
-                minicondaVersion = '3.10.1'
+                minicondaVersion = '4.3.11'
                 packages = ['python']
                 channels = ["${TestConstants.CHANNEL}"]
             }
@@ -119,7 +119,7 @@ class MinicondaIntegrationSpec extends IntegrationSpec {
             miniconda {
                 bootstrapDirectoryPrefix = new File('$tempDirectory/bootstrap')
                 buildEnvironmentDirectory = new File('$tempDirectory/env2')
-                minicondaVersion = '3.16.0'
+                minicondaVersion = '4.5.12'
                 packages = ['python']
                 channels = ["${TestConstants.CHANNEL}"]
             }
@@ -129,8 +129,8 @@ class MinicondaIntegrationSpec extends IntegrationSpec {
         ExecutionResult result = runTasksSuccessfully(':setupPython', ':foo:setupPython')
 
         then:
-        new File("$tempDirectory/bootstrap/python-2/miniconda-3.10.1").exists()
-        new File("$tempDirectory/bootstrap/python-2/miniconda-3.16.0").exists()
+        new File("$tempDirectory/bootstrap/python-2/miniconda-4.3.11").exists()
+        new File("$tempDirectory/bootstrap/python-2/miniconda-4.5.12").exists()
         result.wasExecuted(':bootstrapPython')
         result.wasExecuted(':foo:bootstrapPython')
     }

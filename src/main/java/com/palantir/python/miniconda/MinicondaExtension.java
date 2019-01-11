@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
 public class MinicondaExtension {
     private static final Logger LOG = LoggerFactory.getLogger(MinicondaExtension.class);
 
-    private static final String DEFAULT_CHANNEL = "https://repo.continuum.io/pkgs/free";
+    private static final String DEFAULT_CHANNEL = "https://repo.continuum.io/pkgs/main";
     private static final File DEFAULT_BOOTSTRAP_DIRECTORY_PREFIX =
             new File(System.getProperty("user.home"), ".miniconda-bootstrap");
     private static final String DEFAULT_BUILD_ENVIRONMENT_DIRECTORY = "build/miniconda";

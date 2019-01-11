@@ -100,13 +100,13 @@ class MinicondaBuildTest extends Specification {
                     "--info", "--stacktrace", ":setupCondaBuild", "-PcondaBuildVersion=${condaBuildVersion}")
         }
 
-        BuildResult firstResult = runnerForVersion("2.1.9").build()
+        BuildResult firstResult = runnerForVersion("3.17.6").build()
         LOG.info(firstResult.getOutput())
 
-        BuildResult secondResult = runnerForVersion("2.1.9").build()
+        BuildResult secondResult = runnerForVersion("3.17.6").build()
         LOG.info(secondResult.getOutput())
 
-        BuildResult thirdResult = runnerForVersion("2.1.8").build()
+        BuildResult thirdResult = runnerForVersion("3.17.6").build()
         LOG.info(thirdResult.getOutput())
 
         then:
