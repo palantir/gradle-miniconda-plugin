@@ -72,5 +72,7 @@ workflows:
           # CircleCI2 will ignore tags without this. https://circleci.com/docs/2.0/workflows/#git-tag-job-execution
           filters: { tags: { only: /.*/ } }
       - build:
+          requires:
+            - dependencies
           # CircleCI2 will ignore tags without this. https://circleci.com/docs/2.0/workflows/#git-tag-job-execution
           filters: { tags: { only: /.*/ } }
