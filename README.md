@@ -1,6 +1,8 @@
 Gradle Miniconda Plugin [![Circle CI](https://circleci.com/gh/palantir/gradle-miniconda-plugin.svg?style=svg)](https://circleci.com/gh/palantir/gradle-miniconda-plugin)
 =======================
 
+*WARNING:* This project is not used internally at Palantir and is no longer maintained.  It will soon be archived.
+
 Plugin that sets up a Python environment for building and running tests using
 [Miniconda](http://conda.pydata.org/miniconda.html).
 
