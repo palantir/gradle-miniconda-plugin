@@ -21,6 +21,8 @@ import com.palantir.python.miniconda.tasks.CleanTaskUtils;
 import com.palantir.python.miniconda.tasks.CondaBuild;
 import com.palantir.python.miniconda.tasks.CondaBuildCheck;
 import com.palantir.python.miniconda.tasks.ConfigureRootCondaEnv;
+import com.palantir.python.miniconda.tasks.RunVenvCommand;
+import com.palantir.python.miniconda.tasks.RunVenvPython;
 import com.palantir.python.miniconda.tasks.SetupCondaBuild;
 import com.palantir.python.miniconda.tasks.SetupPython;
 import org.gradle.api.Action;
@@ -65,6 +67,8 @@ public final class MinicondaPlugin implements Plugin<Project> {
         cleanBootstrapPython.dependsOn(cleanSetupPython);
 
         project.getExtensions().create(EXTENSION_NAME, MinicondaExtension.class, project);
+        project.getExtensions().getExtraProperties().set("RunVenvPython", RunVenvPython.class);
+        project.getExtensions().getExtraProperties().set("RunVenvCommand", RunVenvCommand.class);
 
         LOG.debug("MinicondaPlugin tasks created.");
         Configuration configuration = project.getConfigurations().create(CONFIGURATION_NAME);

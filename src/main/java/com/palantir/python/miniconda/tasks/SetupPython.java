@@ -18,6 +18,7 @@ package com.palantir.python.miniconda.tasks;
 
 import com.palantir.python.miniconda.MinicondaExtension;
 import com.palantir.python.miniconda.MinicondaUtils;
+import java.nio.file.Path;
 import java.util.Objects;
 import org.gradle.api.Action;
 import org.gradle.api.Task;
@@ -60,8 +61,14 @@ public class SetupPython extends AbstractExecTask<SetupPython> {
 
         getInputs().property("packages", miniconda.getPackages());
         getOutputs().dir(miniconda.getBuildEnvironmentDirectory());
-
-        executable(miniconda.getBootstrapDirectory().toPath().resolve("bin/conda"));
+        Path condaPath = miniconda.getBootstrapDirectory().toPath()
+                .resolve(miniconda.getScriptsRelativeDir()).resolve("conda");
+        if (miniconda.getOs().isWindows()) {
+            executable("cmd");
+            args("/c", condaPath);
+        } else {
+            executable(condaPath);
+        }
         args("create", "--yes", "--quiet", "-p", miniconda.getBuildEnvironmentDirectory());
         args("--override-channels");
         args(MinicondaUtils.convertChannelsToArgs(miniconda.getChannels()));
